@@ -105,4 +105,9 @@ class Emisora extends Model
         return $this->belongsTo(\App\Models\TipoPrograma::class, 'tipo_programa_id', 'id');
     }
     
+    public function regiones()
+    {
+        return $this->hasMany(Regiones::class);
+    }
+    
 }

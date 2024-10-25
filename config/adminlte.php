@@ -342,6 +342,20 @@ return [
                 ],
             ],
         ],
+        [
+            'text' => 'Clientes o Agencias',
+            'icon' => 'fas fa-fw fa-user',
+            'submenu' => [
+                [
+                    'text' => 'Clientes',
+                    'url' => '/clientes',
+                ],
+                [
+                    'text' => 'Tipos de Cliente',
+                    'url' => '/tipo-clientes/',
+                ],
+            ],
+        ],
         ['header' => 'Administración de Usuarios '],
         [
             'text' => 'Usuarios',

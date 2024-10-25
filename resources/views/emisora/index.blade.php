@@ -45,6 +45,7 @@
 									
 
                                         <th></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -59,15 +60,20 @@
 										<td >{{ $emisora->municipio->estado->name }}</td>
 										<td >{{ $emisora->municipio->name }}</td>
 
-                                            <td class="float-right">
-                                                <form action="{{ route('emisoras.destroy', $emisora->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('emisoras.show', $emisora->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('emisoras.edit', $emisora->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
-                                                </form>
-                                            </td>
+                                        <td class="" style="text-align: right;">
+                                            <a class="btn btn-sm btn-primary " href="{{ route('cobertura', $emisora->id) }}"><i class="fa fa-fw fa-signal"></i> {{ __('Cobertura') }}</a>
+                                            <a class="btn btn-sm btn-info " href="{{ route('emisora.programas.index', $emisora->id) }}"><i class="fa fa-fw fa-film"></i> {{ __('Programas') }}</a>
+                                        </td>
+
+                                        <td class="float-right">
+                                            <form action="{{ route('emisoras.destroy', $emisora->id) }}" method="POST">
+                                                <a class="btn btn-sm btn-primary " href="{{ route('emisoras.show', $emisora->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
+                                                <a class="btn btn-sm btn-success" href="{{ route('emisoras.edit', $emisora->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
+                                            </form>
+                                        </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
