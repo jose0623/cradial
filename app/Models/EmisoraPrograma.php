@@ -37,7 +37,7 @@ class EmisoraPrograma extends Model
      * The attributes that are mass assignable.
      *
      */
-    protected $fillable = ['id_emisora', 'nombre_programa', 'tipo_programa_id', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo', 'horario', 'nombre_locutor', 'activo'];
+    protected $fillable = ['id_emisora', 'nombre_programa', 'tipo_programa_id', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo', 'horario', 'nombre_locutor', 'activo', 'costo'];
 
 
     /**

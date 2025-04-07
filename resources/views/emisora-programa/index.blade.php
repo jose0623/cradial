@@ -41,20 +41,20 @@
                                     <tr>
                                         <th>No</th>
                                         
-									<th >Nombre Programa</th>
-									<th >Tipo Programa</th>
-									<th >Lunes</th>
-									<th >Martes</th>
-									<th >Miercoles</th>
-									<th >Jueves</th>
-									<th >Viernes</th>
-									<th >Sabado</th>
-									<th >Domingo</th>
+									<th >Programa</th>
+									<th >Tipo</th>
+									<th >L</th>
+									<th >M</th>
+									<th >MI</th>
+									<th >J</th>
+									<th >V</th>
+									<th >S</th>
+									<th >D</th>
 									<th >Horario</th>
-									<th >Nombre Locutor</th>
-									<th >Activo</th>
-
-                                        <th></th>
+									<th >Locutor</th>
+									<th >Act</th>
+									<th >Costo</th>
+                                    <th style="min-width: 240px;" ></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -74,6 +74,7 @@
 										<td >{{ $emisoraPrograma->horario }}</td>
 										<td >{{ $emisoraPrograma->nombre_locutor }}</td>
 										<td >{{ $emisoraPrograma->activo ? 'Sí' : 'No'}}</td>
+										<td >{{ $emisoraPrograma->costo }}</td>
 
                                             <td>
                                                 <form action="{{ route('emisora.programas.destroy', $emisoraPrograma->id) }}" method="POST">

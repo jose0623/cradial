@@ -49,7 +49,7 @@
                     {!! $errors->first('nombre_locutor', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
                     <label for="activo" class="form-label">{{ __('Activo') }}</label>
 
@@ -77,7 +77,15 @@
                     {!! $errors->first('activo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
+                <div class="form-group mb-2 mb20">
+                    <label for="costo" class="form-label">{{ __('Costo') }}</label>
+                    <input type="number" name="costo" class="form-control @error('costo') is-invalid @enderror" value="{{ old('costo', $emisoraPrograma?->costo) }}" id="costo" step="0.01" placeholder="0.00">
+                    {!! $errors->first('costo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                </div>
+            </div>
+
+            <div class="col-md-12">
 
                 <div class="form-group mb-2 mb20">
                     <label for="activo" class="form-label">{{ __('Dias de la Programación') }}</label>

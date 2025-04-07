@@ -72,6 +72,10 @@
                                     <strong>Activo:</strong>
                                     {{ $emisoraPrograma->activo }}
                                 </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Costo:</strong>
+                                    {{ $emisoraPrograma->costo }}
+                                </div>
 
                     </div>
                 </div>
