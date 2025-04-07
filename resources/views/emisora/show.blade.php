@@ -65,13 +65,23 @@
                                     {{ $emisora->direccion }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Correo Fisico:</strong>
-                                    {{ $emisora->correo_fisico }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
                                     <strong>Email:</strong>
                                     {{ $emisora->email }}
                                 </div>
+
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Facebook:</strong>
+                                    {{ $emisora->facebook }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Instagram:</strong>
+                                    {{ $emisora->instagram }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Tiktok:</strong>
+                                    {{ $emisora->tiktok }}
+                                </div>
+
                                 <div class="form-group mb-2 mb20">
                                     <strong>Utiliza Remoto:</strong>
                                     {{ $emisora->utiliza_remoto }}
@@ -101,9 +111,10 @@
                                     {{ $emisora->licencia_funcionamiento }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Idioma:</strong>
-                                    {{ $emisora->idioma }}
+                                    <strong>Valor Costo Cuña 30s:</strong>
+                                    {{ $emisora->valor_costo }}
                                 </div>
+                                
                                 <div class="form-group mb-2 mb20">
                                     <strong>Cantidad Maxima Cuñas:</strong>
                                     {{ $emisora->cantidad_maxima_cuñas }}

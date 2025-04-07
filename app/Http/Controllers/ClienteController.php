@@ -76,8 +76,11 @@ class ClienteController extends Controller
     public function edit($id): View
     {
         $cliente = Cliente::find($id);
+        $tipocliente = TipoCliente::orderBy('id', 'desc')->paginate(50);
+        $user = User::orderBy('id', 'asc')->paginate(200);
 
-        return view('cliente.edit', compact('cliente'));
+        //print_r($cliente);
+        return view('cliente.edit', compact('cliente', 'tipocliente', 'user'));
     }
 
     /**

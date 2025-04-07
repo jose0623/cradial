@@ -13,17 +13,22 @@ class Selectores extends Component
     public $estadoSeleccionado = null;
     public $municipioSeleccionado = null;
 
-    public function mount()
+    public function mount($municipioId = null) // Recibe el ID del municipio
     {
-        try {
-            $this->estados = Estado::all();
+        $this->estados = Estado::all();
+    
+        if ($municipioId) {
+            $municipio = Municipio::find($municipioId);
+            if ($municipio) {
+                $this->municipioSeleccionado = $municipioId;
+                $this->estadoSeleccionado = $municipio->estado_id;
+                $this->municipios = Municipio::where('estado_id', $this->estadoSeleccionado)->get();
+            }
+        } else {
             $this->municipios = [];
-            logger('Inicial: Estados cargados.');
-        } catch (\Exception $e) {
-            logger('Error al cargar los estados: ' . $e->getMessage());
-            $this->estados = [];
         }
     }
+    
     public function updatedEstadoSeleccionado($estadoId)
     {
         logger('Estado seleccionado: ' . $estadoId);

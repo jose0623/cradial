@@ -342,6 +342,7 @@ return [
                 ],
             ],
         ],
+        ['header' => 'Area de Clientes '],
         [
             'text' => 'Clientes o Agencias',
             'icon' => 'fas fa-fw fa-user',

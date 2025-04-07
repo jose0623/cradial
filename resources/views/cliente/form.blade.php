@@ -38,11 +38,11 @@
                     <label for="tipo_de_documento" class="form-label">{{ __('Tipo De Documento') }}</label>
                     <select name="tipo_de_documento" id="tipo_de_documento" class="form-control">
                         <option value="">Seleccione... </option>
-                        <option value="1">NIT</option>
-                        <option value="2">C.C</option>
-                        <option value="3">C.E.</option>
-                        <option value="4">T.I.</option>
-                        <option value="5">OTRO</option>
+                        <option {{ $cliente->tipo_de_documento == 1 ? 'selected="selected"' : '' }} value="1">NIT</option>
+                        <option {{ $cliente->tipo_de_documento == 2 ? 'selected="selected"' : '' }} value="2">C.C</option>
+                        <option {{ $cliente->tipo_de_documento == 3 ? 'selected="selected"' : '' }} value="3">C.E.</option>
+                        <option {{ $cliente->tipo_de_documento == 4 ? 'selected="selected"' : '' }} value="4">T.I.</option>
+                        <option {{ $cliente->tipo_de_documento == 5 ? 'selected="selected"' : '' }} value="5">OTRO</option>
                     </select>
                     {!! $errors->first('tipo_de_documento', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
@@ -90,7 +90,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group mb-2 mb20">
-                    @livewire('selectores')
+                    @livewire('selectores', ['municipioId' => $cliente->municipio_id])
                 </div>
             </div>
         

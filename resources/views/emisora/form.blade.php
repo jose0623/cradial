@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="col-md-8">
-                @livewire('selectores')
+                @livewire('selectores', ['municipioId' => $emisora->municipio_id])
             </div>
             
             
@@ -68,12 +68,16 @@
                     <label for="tipo_documento" class="form-label">{{ __('Tipo Documento') }}</label>
         
                     <select name="tipo_documento" id="tipo_documento" class="form-control">
+
+
                         <option value="">Seleccione... </option>
-                        <option value="1">NIT</option>
-                        <option value="2">C.C</option>
-                        <option value="3">C.E.</option>
-                        <option value="4">T.I.</option>
-                        <option value="5">OTRO</option>
+                        <option value="1" {{ $emisora->tipo_documento == 1 ? 'selected="selected"' : '' }}>NIT</option>
+                        <option value="2" {{ $emisora->tipo_documento == 2 ? 'selected="selected"' : '' }}>C.C</option>
+                        <option value="3" {{ $emisora->tipo_documento == 3 ? 'selected="selected"' : '' }}>C.E.</option>
+                        <option value="4" {{ $emisora->tipo_documento == 4 ? 'selected="selected"' : '' }}>T.I.</option>
+                        <option value="5" {{ $emisora->tipo_documento == 5 ? 'selected="selected"' : '' }}>OTRO</option>
+                    
+                    
                     </select>
                     {!! $errors->first('tipo_documento', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
@@ -118,21 +122,39 @@
             </div>
         </div>
         
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group mb-2 mb20">
+                    <label for="facebook" class="form-label">{{ __('Facebook') }}</label>
+                    <input type="tel" name="facebook" class="form-control @error('facebook') is-invalid @enderror" value="{{ old('facebook', $emisora?->facebook) }}" id="facebook" placeholder="Facebook">
+                    {!! $errors->first('facebook', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-2 mb20">
+                    <label for="instagram" class="form-label">{{ __('Instagram') }}</label>
+                    <input type="tel" name="instagram" class="form-control @error('instagram') is-invalid @enderror" value="{{ old('instagram', $emisora?->instagram) }}" id="instagram" placeholder="Instagram">
+                    {!! $errors->first('instagram', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-2 mb20">
+                    <label for="tiktok" class="form-label">{{ __('Tiktok') }}</label>
+                    <input type="tiktok" name="tiktok" class="form-control @error('tiktok') is-invalid @enderror" value="{{ old('tiktok', $emisora?->tiktok) }}" id="tiktok" placeholder="Tiktok">
+                    {!! $errors->first('tiktok', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                </div>
+            </div>
+        </div>
+        
        <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group mb-2 mb20">
                 <label for="direccion" class="form-label">{{ __('Direccion') }}</label>
                 <input type="text" name="direccion" class="form-control @error('direccion') is-invalid @enderror" value="{{ old('direccion', $emisora?->direccion) }}" id="direccion" placeholder="Direccion">
                 {!! $errors->first('direccion', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-group mb-2 mb20">
-                <label for="correo_fisico" class="form-label">{{ __('Correo Fisico') }}</label>
-                <input type="text" name="correo_fisico" class="form-control @error('correo_fisico') is-invalid @enderror" value="{{ old('correo_fisico', $emisora?->correo_fisico) }}" id="correo_fisico" placeholder="Correo Fisico">
-                {!! $errors->first('correo_fisico', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-            </div>
-        </div>
+       
        </div>
 
 
@@ -148,8 +170,8 @@
                     
                     <select name="utiliza_remoto" id="utiliza_remoto" class="form-control">
                         <option value="">Seleccione... </option>
-                        <option value="1">Si</option>
-                        <option value="0">No</option>
+                        <option value="1" {{ $emisora->utiliza_remoto == 1 ? 'selected="selected"' : '' }} >Si</option>
+                        <option value="0" {{ $emisora->utiliza_remoto == 0 ? 'selected="selected"' : '' }} >No</option>
                     </select>
                     {!! $errors->first('utiliza_remoto', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
@@ -159,8 +181,8 @@
                     <label for="tiene_real_audio" class="form-label">{{ __('Tiene Real Audio') }}</label>
                     <select name="tiene_real_audio" id="tiene_real_audio" class="form-control">
                         <option value="">Seleccione... </option>
-                        <option value="1">Si</option>
-                        <option value="0">No</option>
+                        <option value="1" {{ $emisora->tiene_real_audio == 1 ? 'selected="selected"' : '' }} >Si</option>
+                        <option value="0" {{ $emisora->tiene_real_audio == 0 ? 'selected="selected"' : '' }} >No</option>
                     </select>
                     {!! $errors->first('tiene_real_audio', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
@@ -170,8 +192,8 @@
                     <label for="utiliza_perifoneo" class="form-label">{{ __('Utiliza Perifoneo') }}</label>
                     <select name="utiliza_perifoneo" id="utiliza_perifoneo" class="form-control">
                         <option value="">Seleccione... </option>
-                        <option value="1">Si</option>
-                        <option value="0">No</option>
+                        <option value="1" {{ $emisora->utiliza_perifoneo == 1 ? 'selected="selected"' : '' }}>Si</option>
+                        <option value="0" {{ $emisora->utiliza_perifoneo == 0 ? 'selected="selected"' : '' }}>No</option>
                     </select>
                     {!! $errors->first('utiliza_perifoneo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
@@ -231,15 +253,13 @@
 
         <div class="col-md-4">
             <div class="form-group mb-2 mb20">
-                <label for="idioma" class="form-label">{{ __('Idioma') }}</label>
-                <select name="idioma" id="idioma" class="form-control">
-                    <option value="">Seleccione... </option>
-                    <option value="1">Español</option>
-                    <option value="2">Ingles</option>
-                </select>
-                {!! $errors->first('idioma', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                <label for="valor_costo" class="form-label">{{ __('Valor costo pauta por 30 seg') }}</label>
+                <input type="text" name="valor_costo" class="form-control @error('valor_costo') is-invalid @enderror" value="{{ old('valor_costo', $emisora?->valor_costo) }}" id="valor_costo" placeholder="Valor Pauta">
+                {!! $errors->first('valor_costo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
             </div>
         </div>
+
+       
        </div>
         
         
@@ -290,8 +310,8 @@
                     <label for="iva" class="form-label">{{ __('Iva') }}</label>
                     <select name="iva" id="iva" class="form-control">
                         <option value="">Seleccione... </option>
-                        <option value="1">Si</option>
-                        <option value="0">No</option>
+                        <option value="1" {{ $emisora->iva == 1 ? 'selected="selected"' : '' }} >Si</option>
+                        <option value="0" {{ $emisora->iva == 0 ? 'selected="selected"' : '' }} >No</option>
                     </select>
                     {!! $errors->first('iva', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
@@ -383,8 +403,8 @@
                     
                     <select name="estado" id="estado" class="form-control">
                         <option value="">Seleccione... </option>
-                        <option value="1">Si</option>
-                        <option value="0">No</option>
+                        <option value="1" {{ $emisora->estado == 1 ? 'selected="selected"' : '' }} >Si</option>
+                        <option value="0" {{ $emisora->estado == 0 ? 'selected="selected"' : '' }}>No</option>
                     </select>
                     {!! $errors->first('estado', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>

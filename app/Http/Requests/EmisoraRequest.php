@@ -33,7 +33,6 @@ class EmisoraRequest extends FormRequest
 			'telefono2' => 'string',
 			'celular' => 'string',
 			'direccion' => 'string',
-			'correo_fisico' => 'string',
 			'email' => 'string',
 			'utiliza_remoto' => 'required',
 			'tiene_real_audio' => 'required',
@@ -59,6 +58,14 @@ class EmisoraRequest extends FormRequest
 			'password' => 'required|string',
 			'estado' => 'required',
 			'plataforma' => 'string',
+			'facebook' => 'string',
+			'instagram' => 'string',
+			'tiktok' => 'string',
+			'porcentaje_descuento' => 'string',
+			'cantidad_maxima_cuñas' => 'string',
+			'tarifa_remoto' => 'string',
+			'valor_costo' => 'required',
+
         ];
     }
 }

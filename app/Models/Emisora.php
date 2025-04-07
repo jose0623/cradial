@@ -19,7 +19,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property $telefono2
  * @property $celular
  * @property $direccion
- * @property $correo_fisico
  * @property $email
  * @property $utiliza_remoto
  * @property $tiene_real_audio
@@ -28,7 +27,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property $utiliza_perifoneo
  * @property $web
  * @property $licencia_funcionamiento
- * @property $idioma
  * @property $cantidad_maxima_cuñas
  * @property $tarifa_remoto
  * @property $iva
@@ -70,7 +68,7 @@ class Emisora extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'potencia', 'dial', 'tipo_emisoras_id', 'municipio_id', 'tipo_documento', 'identificacion', 'telefono1', 'telefono2', 'celular', 'direccion', 'correo_fisico', 'email', 'utiliza_remoto', 'tiene_real_audio', 'clase_pauta', 'afiliacion_id', 'utiliza_perifoneo', 'web', 'licencia_funcionamiento', 'idioma', 'cantidad_maxima_cuñas', 'tarifa_remoto', 'iva', 'porcentaje_descuento', 'tarifa_perifoneo', 'nombre_programa', 'tipo_programa_id', 'rating', 'programa_mayor_audiencia', 'nombre_periodico', 'nombre_canal_television', 'horario', 'gerente', 'director_noticias', 'nombre_mejor_locutor', 'operador_telefonia', 'lider_opinion', 'login', 'estado', 'plataforma'];
+    protected $fillable = ['name', 'potencia', 'dial', 'tipo_emisoras_id', 'municipio_id', 'tipo_documento', 'identificacion', 'telefono1', 'telefono2', 'celular', 'direccion', 'email', 'utiliza_remoto', 'tiene_real_audio', 'clase_pauta', 'afiliacion_id', 'utiliza_perifoneo', 'web', 'licencia_funcionamiento', 'cantidad_maxima_cuñas', 'tarifa_remoto', 'iva', 'porcentaje_descuento', 'tarifa_perifoneo', 'nombre_programa', 'tipo_programa_id', 'rating', 'programa_mayor_audiencia', 'nombre_periodico', 'nombre_canal_television', 'horario', 'gerente', 'director_noticias', 'nombre_mejor_locutor', 'operador_telefonia', 'lider_opinion', 'login', 'estado', 'plataforma', 'facebook', 'instagram', 'tiktok', 'valor_costo'];
 
 
     /**

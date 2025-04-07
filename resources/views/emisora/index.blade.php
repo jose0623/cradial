@@ -63,6 +63,7 @@
                                         <td class="" style="text-align: right;">
                                             <a class="btn btn-sm btn-primary " href="{{ route('cobertura', $emisora->id) }}"><i class="fa fa-fw fa-signal"></i> {{ __('Cobertura') }}</a>
                                             <a class="btn btn-sm btn-info " href="{{ route('emisora.programas.index', $emisora->id) }}"><i class="fa fa-fw fa-film"></i> {{ __('Programas') }}</a>
+                                            <a class="btn btn-sm btn-dark " href="{{ route('emisora.programas.index', $emisora->id) }}"><i class="bi bi-currency-dollar"></i> {{ __('Tarifas') }}</a>
                                         </td>
 
                                         <td class="float-right">
