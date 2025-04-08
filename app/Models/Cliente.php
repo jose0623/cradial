@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Cliente
@@ -69,5 +70,15 @@ class Cliente extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'vendedor_id', 'id');
     }
+
+    /**
+     * Obtiene los reportes asociados a este cliente.
+     */
+    public function reportes(): HasMany
+    {
+
+        return $this->hasMany(Reporte::class, 'id_cliente', 'id');
+    }
+    
     
 }

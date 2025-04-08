@@ -357,6 +357,21 @@ return [
                 ],
             ],
         ],
+        ['header' => 'Propuestas '],
+        [
+            'text' => 'Propuestas',
+            'icon' => 'fas fa-fw fa-user',
+            'submenu' => [
+                [
+                    'text' => 'Propuestas',
+                    'url' => '/reportes',
+                ],
+                [
+                    'text' => 'Tipos de Cliente',
+                    'url' => '/tipo-clientes/',
+                ],
+            ],
+        ],
         ['header' => 'Administración de Usuarios '],
         [
             'text' => 'Usuarios',

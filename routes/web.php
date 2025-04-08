@@ -7,6 +7,7 @@ use App\Http\Controllers\EmisoraProgramaController;
 use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\PaiseController;
+use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\TipoAfiliacioneController;
 use App\Http\Controllers\TipoClienteController;
 use App\Http\Controllers\TipoEmisoraController;
@@ -63,3 +64,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // Clientes
 Route::resource('clientes', ClienteController::class);
 Route::resource('tipo-clientes', TipoClienteController::class);
+
+//Reportes
+Route::resource('reportes', ReporteController::class);
