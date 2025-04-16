@@ -7,6 +7,75 @@
     @hasSection('subtitle') | @yield('subtitle') @endif
 @stop
 
+<style>
+    .float-right {
+        width: 50%;
+    }
+    .float-left {
+        width: 50%;
+    }
+    .float-right a.btn.btnbr.btn-sm, .float-right .btnCreate {
+        display: block;
+        text-align: right;
+        margin: 0 0 0 auto;
+        width: max-content;
+    }
+    td.float-right form {
+        text-align: end;
+    }
+    .flex.justify-between.flex-1 {
+        display: none;
+    }
+    nav.flex.items-center.justify-between {
+        margin-bottom: 40px;
+    }
+
+
+    /* Para que la paginación de Livewire se vea bien */
+    .flex.justify-between.flex-1.sm\:hidden {
+        display: none;
+    }
+
+    .items-center.justify-between {
+        justify-content: center !important;
+    }
+
+    /* En tu archivo app.css o en un tag style */
+.pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.pagination .page-link {
+    color: #0d6efd;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+}
+
+nav.d-flex p.small.text-muted {
+    display: none;
+}
+
+.btn-group {
+    margin: 0 0 0 auto !important;
+    display: block !important;
+    width: max-content;
+}
+
+/* En tu archivo CSS */
+.btn-export {
+    margin-left: 5px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.btn-export i {
+    margin-right: 5px;
+}
+</style>
 {{-- Extend and customize the page content header --}}
 
 @section('content_header')

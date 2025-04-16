@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reporte_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('reporte_id')->constrained('reportes'); // Relación con reportes/propuestas
-            $table->foreignId('emisora_id')->constrained('emisoras'); // Relación con emisoras existentes
+            $table->foreignId('id_emisora')->constrained('emisoras'); // Relación con emisoras existentes
             $table->foreignId('programa_id')->constrained('emisora_programas'); // Relación con programas
             
             // Detalles de pauta
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->timestamps();
             
             // Índices para consultas rápidas
-            $table->index(['reporte_id', 'emisora_id']);
+            $table->index(['reporte_id', 'id_emisora']);
         });
     }
 

@@ -4,28 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * Class TipoPrograma
- *
- * @property $id
- * @property $name
- * @property $created_at
- * @property $updated_at
- *
- * @package App
- * @mixin \Illuminate\Database\Eloquent\Builder
- */
 class TipoPrograma extends Model
 {
-    
-    protected $perPage = 20;
+    protected $table = 'tipo_programas';
+    protected $primaryKey = 'id';
+    public $timestamps = true;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = ['name'];
 
-
+    public function emisoras()
+    {
+        return $this->belongsToMany(Emisora::class, 'emisora_tipo_programa', 'tipo_programa_id', 'id_emisora');
+    }
 }

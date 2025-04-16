@@ -16,7 +16,8 @@ class PaiseController extends Controller
      */
     public function index(Request $request): View
     {
-        $paises = Paise::paginate();
+        //$paises = Paise::paginate();
+        $paises = Paise::orderBy('name', 'Asc')->paginate();
 
         return view('paise.index', compact('paises'))
             ->with('i', ($request->input('page', 1) - 1) * $paises->perPage());
@@ -40,7 +41,7 @@ class PaiseController extends Controller
         Paise::create($request->validated());
 
         return Redirect::route('paises.index')
-            ->with('success', 'Paise created successfully.');
+            ->with('success', 'País creado exitosamente');
     }
 
     /**
@@ -71,7 +72,7 @@ class PaiseController extends Controller
         $paise->update($request->validated());
 
         return Redirect::route('paises.index')
-            ->with('success', 'Paise updated successfully');
+            ->with('success', 'País actualizado con éxito');
     }
 
     public function destroy($id): RedirectResponse
@@ -79,6 +80,6 @@ class PaiseController extends Controller
         Paise::find($id)->delete();
 
         return Redirect::route('paises.index')
-            ->with('success', 'Paise deleted successfully');
+            ->with('success', 'País eliminado con éxito');
     }
 }

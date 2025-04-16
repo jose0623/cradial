@@ -23,5 +23,17 @@
         </div>
 
         @livewireScripts
+
+
+        // En tu vista, después del @livewireScripts
+        <script>
+            document.addEventListener('livewire:load', function() {
+                Livewire.on('confirmExport', () => {
+                    if(confirm('¿Está seguro que desea generar el reporte?')) {
+                        Livewire.emit('proceedWithExport');
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

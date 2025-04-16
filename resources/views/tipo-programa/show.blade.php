@@ -11,10 +11,10 @@
                 <div class="card">
                     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="float-left">
-                            <span class="card-title">{{ __('Show') }} Tipo Programa</span>
+                            <span class="card-title">{{ __('Ver') }} Tipo Programa</span>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-primary btn-sm" href="{{ route('tipo-programas.index') }}"> {{ __('Back') }}</a>
+                            <a class="btn btn-primary btn-sm" href="{{ route('tipo-programas.index') }}"> {{ __('Regresar') }}</a>
                         </div>
                     </div>
 

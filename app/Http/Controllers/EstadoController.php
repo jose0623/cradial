@@ -15,12 +15,10 @@ class EstadoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index()
     {
-        $estados = Estado::paginate();
-
-        return view('estado.index', compact('estados'))
-            ->with('i', ($request->input('page', 1) - 1) * $estados->perPage());
+        // Solo redirige a la vista que contiene el componente Livewire
+        return view('estado.index');
     }
 
     /**
@@ -42,7 +40,7 @@ class EstadoController extends Controller
         Estado::create($request->validated());
 
         return Redirect::route('estados.index')
-            ->with('success', 'Estado created successfully.');
+            ->with('success', 'Departamento creado con éxito.');
     }
 
     /**
@@ -74,7 +72,7 @@ class EstadoController extends Controller
         $estado->update($request->validated());
 
         return Redirect::route('estados.index')
-            ->with('success', 'Estado updated successfully');
+            ->with('success', 'Departamento actualizado exitosamente');
     }
 
     public function destroy($id): RedirectResponse
@@ -82,6 +80,6 @@ class EstadoController extends Controller
         Estado::find($id)->delete();
 
         return Redirect::route('estados.index')
-            ->with('success', 'Estado deleted successfully');
+            ->with('success', 'Departamento eliminado exitosamente');
     }
 }

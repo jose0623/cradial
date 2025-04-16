@@ -11,10 +11,10 @@
                 <div class="card">
                     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="float-left">
-                            <span class="card-title">{{ __('Show') }} Cobertura</span>
+                            <span class="card-title">{{ __('Ver') }} Cobertura</span>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-primary btn-sm" href="{{ route('coberturas.index') }}"> {{ __('Back') }}</a>
+                            <a class="btn btn-primary btn-sm" href="{{ route('coberturas.index') }}"> {{ __('Regresar') }}</a>
                         </div>
                     </div>
 
@@ -22,7 +22,7 @@
                         
                                 <div class="form-group mb-2 mb20">
                                     <strong>Emisora Id:</strong>
-                                    {{ $cobertura->emisora_id }}
+                                    {{ $cobertura->id_emisora }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Municipio Id:</strong>

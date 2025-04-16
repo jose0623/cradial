@@ -11,7 +11,7 @@
             <div class="col-sm-12">
                 <div class="card">
 
-                    @livewire('municipio-form', ['emisora_id' => $emisora_id])
+                    @livewire('municipio-form', ['id_emisora' => $id_emisora])
 
                 </div>
             </div>

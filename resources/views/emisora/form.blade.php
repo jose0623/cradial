@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
-                    <label for="name" class="form-label">{{ __('Name') }}</label>
+                    <label for="name" class="form-label">{{ __('Nombre') }}</label>
                     <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $emisora?->name) }}" id="name" placeholder="Name">
                     {!! $errors->first('name', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>

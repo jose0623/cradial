@@ -8,6 +8,7 @@ use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\PaiseController;
 use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\ReporteItemController;
 use App\Http\Controllers\TipoAfiliacioneController;
 use App\Http\Controllers\TipoClienteController;
 use App\Http\Controllers\TipoEmisoraController;
@@ -43,11 +44,11 @@ Route::resource('tipo-afiliaciones', TipoAfiliacioneController::class);
 Route::resource('tipo-emisoras', TipoEmisoraController::class);
 Route::resource('emisoras', EmisoraController::class);
 //Route::resource('coberturas', CoberturaController::class);
-Route::get('/coberturas/{emisora_id}', function ($emisora_id) {
-    return view('cobertura.index', ['emisora_id' => $emisora_id]);
+Route::get('/coberturas/{id_emisora}', function ($id_emisora) {
+    return view('cobertura.index', ['id_emisora' => $id_emisora]);
 });
-Route::get('cobertura/{emisora}', function ($emisora_id) {
-    return view('cobertura.index', ['emisora_id' => $emisora_id]);
+Route::get('cobertura/{emisora}', function ($id_emisora) {
+    return view('cobertura.index', ['id_emisora' => $id_emisora]);
 })->name('cobertura');;
 Route::get('emisoras/{id_emisora}/programas', [EmisoraProgramaController::class, 'index'])->name('emisora.programas.index');
 Route::get('emisoras/{id_emisora}/programas/create', [EmisoraProgramaController::class, 'create'])->name('emisora.programas.create');
@@ -67,3 +68,18 @@ Route::resource('tipo-clientes', TipoClienteController::class);
 
 //Reportes
 Route::resource('reportes', ReporteController::class);
+
+
+Route::get('/selects-anidados', function () {
+    return view('selects-anidados');
+});
+
+
+Route::get('reportes/{id_reporte}/reporte-items', [ReporteItemController::class, 'index'])->name('reportes.reporte-items.index');
+Route::get('reportes/{id_reporte}/reporte-items/create', [ReporteItemController::class, 'create'])->name('reportes.reporte-items.create');
+Route::post('reportes/{id_reporte}/reporte-items', [ReporteItemController::class, 'store'])->name('reportes.reporte-items.store');
+Route::get('reportes/reporte-items/{programa}', [ReporteItemController::class, 'show'])->name('reportes.reporte-items.show');
+Route::get('reportes/reporte-items/{programa}/edit', [ReporteItemController::class, 'edit'])->name('reportes.reporte-items.edit');
+Route::put('reportes/reporte-items/{programa}', [ReporteItemController::class, 'update'])->name('reportes.reporte-items.update');
+Route::delete('reportes/reporte-items/{programa}', [ReporteItemController::class, 'destroy'])->name('reportes.reporte-items.destroy');
+Route::resource('reporte-items', ReporteItemController::class);

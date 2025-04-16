@@ -22,7 +22,7 @@ class CoberturaRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'emisora_id' => 'required',
+			'id_emisora' => 'required',
 			'municipio_id' => 'required',
         ];
     }

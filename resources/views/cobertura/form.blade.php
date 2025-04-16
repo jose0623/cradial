@@ -2,9 +2,9 @@
     <div class="col-md-12">
         
         <div class="form-group mb-2 mb20">
-            <label for="emisora_id" class="form-label">{{ __('Emisora Id') }}</label>
-            <input type="text" name="emisora_id" class="form-control @error('emisora_id') is-invalid @enderror" value="{{ old('emisora_id', $cobertura?->emisora_id) }}" id="emisora_id" placeholder="Emisora Id">
-            {!! $errors->first('emisora_id', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+            <label for="id_emisora" class="form-label">{{ __('Emisora Id') }}</label>
+            <input type="text" name="id_emisora" class="form-control @error('id_emisora') is-invalid @enderror" value="{{ old('id_emisora', $cobertura?->id_emisora) }}" id="id_emisora" placeholder="Emisora Id">
+            {!! $errors->first('id_emisora', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
         <div class="form-group mb-2 mb20">
             <label for="municipio_id" class="form-label">{{ __('Municipio Id') }}</label>

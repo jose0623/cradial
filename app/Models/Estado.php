@@ -37,5 +37,10 @@ class Estado extends Model
     {
         return $this->belongsTo(\App\Models\Paise::class, 'pais_id', 'id');
     }
+
+    public function municipios()
+    {
+        return $this->hasMany(Municipio::class);
+    }
     
 }

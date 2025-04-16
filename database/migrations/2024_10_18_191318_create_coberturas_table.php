@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('coberturas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('emisora_id')->constrained()->onDelete('cascade');
+            $table->foreignId('id_emisora')->constrained()->onDelete('cascade');
             $table->foreignId('municipio_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             // Agrega otros campos que necesites

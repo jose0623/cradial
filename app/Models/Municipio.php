@@ -20,4 +20,10 @@ class Municipio extends Model
     {
         return $this->hasMany(Regiones::class);
     }
+
+    public function emisoras()
+    {
+        return $this->hasMany(Emisora::class);
+    }
+
 }

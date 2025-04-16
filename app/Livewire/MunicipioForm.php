@@ -10,7 +10,7 @@ use App\Models\Regiones;
 
 class MunicipioForm extends Component
 {
-    public $emisora_id;
+    public $id_emisora;
     public $estado_id;
     public $selectedMunicipios = [];
     public $municipios = [];
@@ -19,15 +19,15 @@ class MunicipioForm extends Component
     public $regiones = [];
     public $selectedMunicipiosIds = [];
 
-    public function mount($emisora_id)
+    public function mount($id_emisora)
     {
-        $this->emisora_id = $emisora_id;
+        $this->id_emisora = $id_emisora;
         $this->emisoras = Emisora::all();
         $this->estados = Estado::all();
 
         // Cargar regiones y verificar que haya datos
         $this->regiones = Regiones::with('emisora', 'municipio')
-            ->where('emisora_id', $emisora_id)
+            ->where('id_emisora', $id_emisora)
             ->get();
 
         // Verificación de que la colección no esté vacía
@@ -46,14 +46,14 @@ class MunicipioForm extends Component
     public function save()
     {
         foreach ($this->selectedMunicipios as $municipio_id) {
-            // Verificar si ya existe un registro con el mismo emisora_id y municipio_id
-            $existingRegion = Regiones::where('emisora_id', $this->emisora_id)
+            // Verificar si ya existe un registro con el mismo id_emisora y municipio_id
+            $existingRegion = Regiones::where('id_emisora', $this->id_emisora)
                 ->where('municipio_id', $municipio_id)
                 ->first();
 
             if (!$existingRegion) {
                 Regiones::create([
-                    'emisora_id' => $this->emisora_id,
+                    'id_emisora' => $this->id_emisora,
                     'municipio_id' => $municipio_id,
                 ]);
             }
@@ -61,7 +61,7 @@ class MunicipioForm extends Component
 
         // Actualizar regiones
         $this->regiones = Regiones::with('emisora', 'municipio')
-            ->where('emisora_id', $this->emisora_id)
+            ->where('id_emisora', $this->id_emisora)
             ->get();
 
         // Manejo de la colección de regiones
@@ -80,7 +80,7 @@ class MunicipioForm extends Component
         if ($region) {
             $region->delete();
             $this->regiones = Regiones::with('emisora', 'municipio')
-                ->where('emisora_id', $this->emisora_id)
+                ->where('id_emisora', $this->id_emisora)
                 ->get();
             $this->selectedMunicipiosIds = $this->regiones->pluck('municipio_id')->toArray();
             session()->flash('message', 'Registro eliminado exitosamente.');

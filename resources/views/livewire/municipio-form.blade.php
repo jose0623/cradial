@@ -4,7 +4,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center;">
 
             @foreach ($emisoras as $emisora)
-                @if ($emisora->id == $emisora_id)
+                @if ($emisora->id == $id_emisora)
                 <span id="card_title">
                     Cobertura de la Emisora: <b> {{ $emisora->name }} </b>
                 </span>
