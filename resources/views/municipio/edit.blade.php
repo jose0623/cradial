@@ -9,9 +9,10 @@
         <div class="">
             <div class="col-md-12">
 
+                <br>
                 <div class="card card-default">
                     <div class="card-header">
-                        <span class="card-title">{{ __('Update') }} Municipio</span>
+                        <span class="card-title">{{ __('Actualizar') }} Municipio</span>
                     </div>
                     <div class="card-body bg-white">
                         <form method="POST" action="{{ route('municipios.update', $municipio->id) }}"  role="form" enctype="multipart/form-data">

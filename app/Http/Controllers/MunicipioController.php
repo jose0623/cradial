@@ -15,12 +15,10 @@ class MunicipioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index()
     {
-        $municipios = Municipio::paginate();
-
-        return view('municipio.index', compact('municipios'))
-            ->with('i', ($request->input('page', 1) - 1) * $municipios->perPage());
+        // Redirige a la vista que contiene el componente Livewire
+        return view('municipio.index');
     }
 
     /**
@@ -42,7 +40,7 @@ class MunicipioController extends Controller
         Municipio::create($request->validated());
 
         return Redirect::route('municipios.index')
-            ->with('success', 'Municipio created successfully.');
+            ->with('success', 'Municipio creado exitosamente.');
     }
 
     /**
@@ -74,7 +72,7 @@ class MunicipioController extends Controller
         $municipio->update($request->validated());
 
         return Redirect::route('municipios.index')
-            ->with('success', 'Municipio updated successfully');
+            ->with('success', 'Municipio actualizado exitosamente');
     }
 
     public function destroy($id): RedirectResponse
@@ -82,6 +80,6 @@ class MunicipioController extends Controller
         Municipio::find($id)->delete();
 
         return Redirect::route('municipios.index')
-            ->with('success', 'Municipio deleted successfully');
+            ->with('success', 'Municipio eliminado exitosamente');
     }
 }
