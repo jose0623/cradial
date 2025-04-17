@@ -14,12 +14,10 @@ class TipoAfiliacioneController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index()
     {
-        $tipoAfiliaciones = TipoAfiliacione::paginate();
-
-        return view('tipo-afiliacione.index', compact('tipoAfiliaciones'))
-            ->with('i', ($request->input('page', 1) - 1) * $tipoAfiliaciones->perPage());
+        // Redirige a la vista que contiene el componente Livewire
+        return view('tipo-afiliacione.index');
     }
 
     /**
@@ -40,7 +38,7 @@ class TipoAfiliacioneController extends Controller
         TipoAfiliacione::create($request->validated());
 
         return Redirect::route('tipo-afiliaciones.index')
-            ->with('success', 'TipoAfiliacione created successfully.');
+            ->with('success', 'Afiliación creada con éxito.');
     }
 
     /**
@@ -71,7 +69,7 @@ class TipoAfiliacioneController extends Controller
         $tipoAfiliacione->update($request->validated());
 
         return Redirect::route('tipo-afiliaciones.index')
-            ->with('success', 'TipoAfiliacione updated successfully');
+            ->with('success', 'Afiliación actualizada con exito');
     }
 
     public function destroy($id): RedirectResponse
@@ -79,6 +77,6 @@ class TipoAfiliacioneController extends Controller
         TipoAfiliacione::find($id)->delete();
 
         return Redirect::route('tipo-afiliaciones.index')
-            ->with('success', 'TipoAfiliacione deleted successfully');
+            ->with('success', 'Afiliación Eliminada con exito');
     }
 }
