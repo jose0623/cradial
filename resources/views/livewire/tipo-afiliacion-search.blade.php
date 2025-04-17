@@ -34,6 +34,7 @@
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
+                    <th>N°</th>
                     <th wire:click="sortBy('name')" style="cursor: pointer;">
                         Nombre 
                         @if($sortField === 'name')
@@ -50,8 +51,9 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($tipoAfiliaciones as $tipoAfiliacione)
+                @forelse($tipoAfiliaciones as $index => $tipoAfiliacione)
                     <tr>
+                        <td>{{ $tipoAfiliaciones->firstItem() + $index }}</td> <!-- Numeración consecutiva -->
                         <td>{{ $tipoAfiliacione->name }}</td>
                         <td>
                             <form action="{{ route('tipo-afiliaciones.destroy', $tipoAfiliacione->id) }}" method="POST">
