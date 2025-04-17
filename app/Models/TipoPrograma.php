@@ -15,5 +15,7 @@ class TipoPrograma extends Model
     public function emisoras()
     {
         return $this->belongsToMany(Emisora::class, 'emisora_tipo_programa', 'tipo_programa_id', 'id_emisora');
+        // tipo_programa_id: FK de TipoPrograma en la tabla pivote
+        // id_emisora: FK de Emisora en la tabla pivote
     }
 }

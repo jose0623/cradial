@@ -14,12 +14,10 @@ class TipoProgramaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index()
     {
-        $tipoProgramas = TipoPrograma::paginate();
-
-        return view('tipo-programa.index', compact('tipoProgramas'))
-            ->with('i', ($request->input('page', 1) - 1) * $tipoProgramas->perPage());
+        // Redirige a la vista que contiene el componente Livewire
+        return view('tipo-programa.index');
     }
 
     /**
@@ -40,7 +38,7 @@ class TipoProgramaController extends Controller
         TipoPrograma::create($request->validated());
 
         return Redirect::route('tipo-programas.index')
-            ->with('success', 'TipoPrograma created successfully.');
+            ->with('success', 'El tipo de programa fue creado con éxito.');
     }
 
     /**
@@ -71,7 +69,7 @@ class TipoProgramaController extends Controller
         $tipoPrograma->update($request->validated());
 
         return Redirect::route('tipo-programas.index')
-            ->with('success', 'TipoPrograma updated successfully');
+            ->with('success', 'El tipo de programa fue actualizado exitosamente');
     }
 
     public function destroy($id): RedirectResponse
@@ -79,6 +77,6 @@ class TipoProgramaController extends Controller
         TipoPrograma::find($id)->delete();
 
         return Redirect::route('tipo-programas.index')
-            ->with('success', 'TipoPrograma deleted successfully');
+            ->with('success', 'El tipo programa fue eliminado exitosamente');
     }
 }
