@@ -14,12 +14,10 @@ class TipoEmisoraController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index()
     {
-        $tipoEmisoras = TipoEmisora::paginate();
-
-        return view('tipo-emisora.index', compact('tipoEmisoras'))
-            ->with('i', ($request->input('page', 1) - 1) * $tipoEmisoras->perPage());
+        // Redirige a la vista que contiene el componente Livewire
+        return view('tipo-emisora.index');
     }
 
     /**
@@ -40,7 +38,7 @@ class TipoEmisoraController extends Controller
         TipoEmisora::create($request->validated());
 
         return Redirect::route('tipo-emisoras.index')
-            ->with('success', 'TipoEmisora created successfully.');
+            ->with('success', 'TipoEmisora ​​creado con éxito.');
     }
 
     /**
@@ -71,7 +69,7 @@ class TipoEmisoraController extends Controller
         $tipoEmisora->update($request->validated());
 
         return Redirect::route('tipo-emisoras.index')
-            ->with('success', 'TipoEmisora updated successfully');
+            ->with('success', 'TipoEmisora ​​actualizado correctamente.');
     }
 
     public function destroy($id): RedirectResponse
@@ -79,6 +77,6 @@ class TipoEmisoraController extends Controller
         TipoEmisora::find($id)->delete();
 
         return Redirect::route('tipo-emisoras.index')
-            ->with('success', 'TipoEmisora deleted successfully');
+            ->with('success', 'TipoEmisora ​​eliminado correctamente.');
     }
 }
