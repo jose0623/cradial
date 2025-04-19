@@ -5,6 +5,7 @@ use App\Http\Controllers\CoberturaController;
 use App\Http\Controllers\EmisoraController;
 use App\Http\Controllers\EmisoraProgramaController;
 use App\Http\Controllers\EstadoController;
+use App\Http\Controllers\FiestaController;
 use App\Http\Controllers\MunicipioController;
 use App\Http\Controllers\PaiseController;
 use App\Http\Controllers\ReporteController;
@@ -50,6 +51,7 @@ Route::get('/coberturas/{id_emisora}', function ($id_emisora) {
 Route::get('cobertura/{emisora}', function ($id_emisora) {
     return view('cobertura.index', ['id_emisora' => $id_emisora]);
 })->name('cobertura');;
+
 Route::get('emisoras/{id_emisora}/programas', [EmisoraProgramaController::class, 'index'])->name('emisora.programas.index');
 Route::get('emisoras/{id_emisora}/programas/create', [EmisoraProgramaController::class, 'create'])->name('emisora.programas.create');
 Route::post('emisoras/{id_emisora}/programas', [EmisoraProgramaController::class, 'store'])->name('emisora.programas.store');
@@ -83,3 +85,12 @@ Route::get('reportes/reporte-items/{programa}/edit', [ReporteItemController::cla
 Route::put('reportes/reporte-items/{programa}', [ReporteItemController::class, 'update'])->name('reportes.reporte-items.update');
 Route::delete('reportes/reporte-items/{programa}', [ReporteItemController::class, 'destroy'])->name('reportes.reporte-items.destroy');
 Route::resource('reporte-items', ReporteItemController::class);
+
+Route::get('emisoras/{id_emisora}/fiestas', [FiestaController::class, 'index'])->name('emisora.fiestas.index');
+Route::get('emisoras/{id_emisora}/fiestas/create', [FiestaController::class, 'create'])->name('emisora.fiestas.create');
+Route::post('emisoras/fiestas', [FiestaController::class, 'store'])->name('emisora.fiestas.store');
+Route::get('emisoras/fiestas/{fiesta}', [FiestaController::class, 'show'])->name('emisora.fiestas.show');
+Route::get('emisoras/fiestas/{fiesta}/edit', [FiestaController::class, 'edit'])->name('emisora.fiestas.edit');
+Route::put('emisoras/fiestas/{fiesta}', [FiestaController::class, 'update'])->name('emisora.fiestas.update');
+Route::delete('emisoras/fiestas/{fiesta}', [FiestaController::class, 'destroy'])->name('emisora.fiestas.destroy');
+//Route::resource('emisoras.fiestas', FiestaController::class);
