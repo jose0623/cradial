@@ -147,7 +147,7 @@
             <div class="col-md-3">
                 <div class="form-group mb-2 mb20">
                     <label for="tarifa_remoto" class="form-label">{{ __('Tarifa Remoto') }}</label>
-                    <input type="number" name="tarifa_remoto" class="form-control @error('tarifa_remoto') is-invalid @enderror" value="{{ old('tarifa_remoto', $emisora?->tarifa_remoto) }}" id="tarifa_remoto" placeholder="Tarifa Remoto">
+                    <input type="text" name="tarifa_remoto" class="moneda form-control @error('tarifa_remoto') is-invalid @enderror" value="{{ old('tarifa_remoto', $emisora?->tarifa_remoto) }}" id="tarifa_remoto" placeholder="Tarifa Remoto">
                     {!! $errors->first('tarifa_remoto', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
@@ -184,7 +184,7 @@
             <div class="col-md-3">
                 <div class="form-group mb-2 mb20">
                     <label for="tarifa_perifoneo" class="form-label">{{ __('Tarifa Perifoneo') }}</label>
-                    <input type="number" name="tarifa_perifoneo" class="form-control @error('tarifa_perifoneo') is-invalid @enderror" value="{{ old('tarifa_perifoneo', $emisora?->tarifa_perifoneo) }}" id="tarifa_perifoneo" placeholder="Tarifa Perifoneo">
+                    <input type="text" name="tarifa_perifoneo" class=" moneda form-control @error('tarifa_perifoneo') is-invalid @enderror" value="{{ old('tarifa_perifoneo', $emisora?->tarifa_perifoneo) }}" id="tarifa_perifoneo" placeholder="Tarifa Perifoneo">
                     {!! $errors->first('tarifa_perifoneo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
