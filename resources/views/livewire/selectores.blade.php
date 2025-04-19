@@ -2,9 +2,9 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group mb-2 mb20">
-                <label for="estado_id" class="form-label">{{ __('Estado') }}</label>
+                <label for="estado_id" class="form-label">{{ __('Departamento') }}</label>
                 <select class="form-control" id="estado" wire:model.live="estadoSeleccionado">
-                    <option value="">Seleccione un estado</option>
+                    <option value="">Seleccione un Departamento</option>
                     @foreach($estados as $estado)
                         <option value="{{ $estado->id }}">{{ $estado->name }}</option>
                     @endforeach

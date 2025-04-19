@@ -21,7 +21,7 @@
                     <div class="card-body bg-white">
                         
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Name:</strong>
+                                    <strong>Nombre:</strong>
                                     {{ $emisora->name }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
@@ -33,41 +33,111 @@
                                     {{ $emisora->dial }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Tipo Emisoras Id:</strong>
-                                    {{ $emisora->tipo_emisoras_id }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Municipio Id:</strong>
-                                    {{ $emisora->municipio_id }}
+                                    <strong>Tipo Emisora:</strong>
+                                    {{ $emisora->tipoEmisora->name }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Tipo Documento:</strong>
-                                    {{ $emisora->tipo_documento }}
+                                    {{ $emisora->tipo_documento == 1 ? 'NIT' : '' }}
+                                    {{ $emisora->tipo_documento == 2 ? 'C.C' : '' }}
+                                    {{ $emisora->tipo_documento == 3 ? 'C.E.' : '' }}
+                                    {{ $emisora->tipo_documento == 4 ? 'T.I.' : '' }}
+                                    {{ $emisora->tipo_documento == 5 ? 'OTRO' : '' }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Identificacion:</strong>
                                     {{ $emisora->identificacion }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Telefono1:</strong>
-                                    {{ $emisora->telefono1 }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Telefono2:</strong>
-                                    {{ $emisora->telefono2 }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Celular:</strong>
-                                    {{ $emisora->celular }}
+                                    <strong>Municipio:</strong>
+                                    {{ $emisora->municipio->name }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Direccion:</strong>
                                     {{ $emisora->direccion }}
                                 </div>
+
+                                <br>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Email:</strong>
-                                    {{ $emisora->email }}
+                                    <strong>Tiene Real Audio:</strong>
+                                    {{ $emisora->tiene_real_audio == 1 ? 'Si' : 'No' }}
                                 </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Real Audio:</strong>
+                                    {{ $emisora->real_audio }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Descripcion del Real Audio:</strong>
+                                    {{ $emisora->descripcion_real_audio }}
+                                </div>
+
+
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Utiliza Remoto:</strong>
+                                    {{ $emisora->utiliza_remoto == 1 ? 'Si' : 'No' }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Tarifa Remoto:</strong>
+                                    {{ $emisora->tarifa_remoto }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Tiempo del Remoto:</strong>
+                                    {{ $emisora->tiempo_remoto }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Descripcion del Remoto:</strong>
+                                    {{ $emisora->descripcion_remoto }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Utiliza Perifoneo:</strong>
+                                    {{ $emisora->utiliza_perifoneo == 1 ? 'Si' : 'No' }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Tarifa Perifoneo:</strong>
+                                    {{ $emisora->tarifa_perifoneo }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Tiempo del Perifoneo:</strong>
+                                    {{ $emisora->tarifa_perifoneo }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Descripcion del Perifoneo:</strong>
+                                    {{ $emisora->descripcion_perifoneo }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Web:</strong>
+                                    {{ $emisora->web }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Pauta que no puede emitir la emisora?:</strong>
+                                    {{ $emisora->clase_pauta }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Licencia Funcionamiento:</strong>
+                                    {{ $emisora->licencia_funcionamiento }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Afiliacion:</strong>
+                                    {{ $emisora->tipoAfiliacione->name }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Cantidad Minima (Cuñas o valor):</strong>
+                                    {{ $emisora->cantidad_minima }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Iva:</strong>
+                                    {{ $emisora->iva == 1 ? 'Si' : 'No' }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Nombre Periodico:</strong>
+                                    {{ $emisora->nombre_periodico }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Nombre Canal Television:</strong>
+                                    {{ $emisora->nombre_canal_television }}
+                                </div>
+
+                                <br>
 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Facebook:</strong>
@@ -81,119 +151,69 @@
                                     <strong>Tiktok:</strong>
                                     {{ $emisora->tiktok }}
                                 </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Email:</strong>
+                                    {{ $emisora->email }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Email 2:</strong>
+                                    {{ $emisora->email2 }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Email 3:</strong>
+                                    {{ $emisora->email3 }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Telefono:</strong>
+                                    {{ $emisora->telefono1 }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Celular:</strong>
+                                    {{ $emisora->celular }}
+                                </div>
 
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Utiliza Remoto:</strong>
-                                    {{ $emisora->utiliza_remoto }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Tiene Real Audio:</strong>
-                                    {{ $emisora->tiene_real_audio }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Clase Pauta:</strong>
-                                    {{ $emisora->clase_pauta }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Afiliacion Id:</strong>
-                                    {{ $emisora->afiliacion_id }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Utiliza Perifoneo:</strong>
-                                    {{ $emisora->utiliza_perifoneo }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Web:</strong>
-                                    {{ $emisora->web }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Licencia Funcionamiento:</strong>
-                                    {{ $emisora->licencia_funcionamiento }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Valor Costo Cuña 30s:</strong>
-                                    {{ $emisora->valor_costo }}
-                                </div>
+                                <br>
                                 
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Cantidad Maxima Cuñas:</strong>
-                                    {{ $emisora->cantidad_maxima_cuñas }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Tarifa Remoto:</strong>
-                                    {{ $emisora->tarifa_remoto }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Iva:</strong>
-                                    {{ $emisora->iva }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Porcentaje Descuento:</strong>
-                                    {{ $emisora->porcentaje_descuento }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Tarifa Perifoneo:</strong>
-                                    {{ $emisora->tarifa_perifoneo }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Nombre Programa:</strong>
-                                    {{ $emisora->nombre_programa }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Tipo Programa Id:</strong>
-                                    {{ $emisora->tipo_programa_id }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Rating:</strong>
-                                    {{ $emisora->rating }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Programa Mayor Audiencia:</strong>
-                                    {{ $emisora->programa_mayor_audiencia }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Nombre Periodico:</strong>
-                                    {{ $emisora->nombre_periodico }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Nombre Canal Television:</strong>
-                                    {{ $emisora->nombre_canal_television }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Horario:</strong>
-                                    {{ $emisora->horario }}
-                                </div>
+                               
                                 <div class="form-group mb-2 mb20">
                                     <strong>Gerente:</strong>
                                     {{ $emisora->gerente }}
+                                </div>
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Telefono del Gerente:</strong>
+                                    {{ $emisora->telefono_gerente }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Director Noticias:</strong>
                                     {{ $emisora->director_noticias }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Nombre Mejor Locutor:</strong>
-                                    {{ $emisora->nombre_mejor_locutor }}
+                                    <strong>Telefono del Director Noticias:</strong>
+                                    {{ $emisora->telefono_director_noticias }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Operador Telefonia:</strong>
-                                    {{ $emisora->operador_telefonia }}
+                                    <strong>Encargado de Pauta:</strong>
+                                    {{ $emisora->encargado_pauta }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Lider Opinion:</strong>
-                                    {{ $emisora->lider_opinion }}
+                                    <strong>Telefono del Encargado de Pauta:</strong>
+                                    {{ $emisora->telefono_encargado_pauta }}
+                                </div>
+
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Representante Legal:</strong>
+                                    {{ $emisora->representante_legal }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Login:</strong>
-                                    {{ $emisora->login }}
+                                    <strong>Telefono del Representante Legal:</strong>
+                                    {{ $emisora->telefono_representante_legal }}
                                 </div>
+
+                                <br>
+                                
                                 <div class="form-group mb-2 mb20">
-                                    <strong>Estado:</strong>
-                                    {{ $emisora->estado }}
-                                </div>
-                                <div class="form-group mb-2 mb20">
-                                    <strong>Plataforma:</strong>
-                                    {{ $emisora->plataforma }}
+                                    <strong>Observaciones:</strong>
+                                    {{ $emisora->observaciones }}
                                 </div>
 
                     </div>
