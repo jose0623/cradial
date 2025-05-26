@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CostoPrograma;
 use App\Models\EmisoraPrograma;
+use App\Http\Requests\EmisoraProgramaRequest;
+use App\Models\Emisora;
+use App\Models\TipoPrograma;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\EmisoraProgramaRequest;
-use App\Models\TipoPrograma;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Carbon\Carbon;
 
 class EmisoraProgramaController extends Controller
 {
@@ -17,19 +20,23 @@ class EmisoraProgramaController extends Controller
      */
     public function index(Request $request, $id_emisora): View
     {
-        $emisoraProgramas = EmisoraPrograma::where('id_emisora', $id_emisora)->paginate();
+        
+    
+        // Opción 2: Si estás usando Livewire (recomendado)
+        //return view('emisora-programa.index', ['id_emisora' => $id_emisora]);
 
-        return view('emisora-programa.index', compact('emisoraProgramas', 'id_emisora'))
-            ->with('i', ($request->input('page', 1) - 1) * $emisoraProgramas->perPage());
+        $emisora = Emisora::where('id', $id_emisora)->first();
+        return view('emisora-programa.index', compact('emisora', 'id_emisora'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
      */
     public function create($id_emisora): View
-    {   
+    {
         $emisoraPrograma = new EmisoraPrograma();
-        $tipoPrograma =  TipoPrograma::orderBy('id', 'asc')->paginate(200);
+        $tipoPrograma = TipoPrograma::orderBy('id', 'asc')->paginate(200);
         return view('emisora-programa.create', compact('emisoraPrograma', 'id_emisora', 'tipoPrograma'));
     }
 
@@ -43,29 +50,31 @@ class EmisoraProgramaController extends Controller
         $id_emisora = $request->input('id_emisora');
 
         // Obtener los valores de los checkboxes
-        $lunes = $request->input('lunes') ? 1 : 0;
-        $martes = $request->input('martes') ? 1 : 0;
-        $miercoles = $request->input('miercoles') ? 1 : 0;
-        $jueves = $request->input('jueves') ? 1 : 0;
-        $viernes = $request->input('viernes') ? 1 : 0;
-        $sabado = $request->input('sabado') ? 1 : 0;
-        $domingo = $request->input('domingo') ? 1 : 0;
-    
+        $dias = [
+            'lunes' => $request->input('lunes') ? 1 : 0,
+            'martes' => $request->input('martes') ? 1 : 0,
+            'miercoles' => $request->input('miercoles') ? 1 : 0,
+            'jueves' => $request->input('jueves') ? 1 : 0,
+            'viernes' => $request->input('viernes') ? 1 : 0,
+            'sabado' => $request->input('sabado') ? 1 : 0,
+            'domingo' => $request->input('domingo') ? 1 : 0,
+        ];
+
         // Crear un nuevo registro de EmisoraPrograma
-        EmisoraPrograma::create(array_merge($request->validated(), [
+        $emisoraPrograma = EmisoraPrograma::create(array_merge($request->validated(), [
             'id_emisora' => $id_emisora,
-            'lunes' => $lunes,
-            'martes' => $martes,
-            'miercoles' => $miercoles,
-            'jueves' => $jueves,
-            'viernes' => $viernes,
-            'sabado' => $sabado,
-            'domingo' => $domingo,
-        ]));
-    
+        ] + $dias));
+
+        // Guardar el costo inicial en la tabla costos_programas
+        CostoPrograma::create([
+            'id_programa' => $emisoraPrograma->id, // Usamos el ID del EmisoraPrograma creado
+            'costo' => $request->input('costo'),
+            'fecha' => Carbon::now()->toDateString(),
+        ]);
+
         // Redirigir a la lista de programas de la emisora
         return Redirect::route('emisora.programas.index', $id_emisora)
-        ->with('success', 'EmisoraPrograma created successfully.');
+            ->with('success', 'EmisoraPrograma created successfully.');
     }
 
     /**
@@ -74,8 +83,14 @@ class EmisoraProgramaController extends Controller
     public function show($id): View
     {
         $emisoraPrograma = EmisoraPrograma::findOrFail($id);
-
-        return view('emisora-programa.show', compact('emisoraPrograma'));
+    
+        // Obtener los últimos 10 costos históricos del programa
+        $historialCostos = CostoPrograma::where('id_programa', $emisoraPrograma->id)
+            ->orderBy('fecha', 'desc')
+            ->take(10)
+            ->get();
+    
+        return view('emisora-programa.show', compact('emisoraPrograma', 'historialCostos'));
     }
 
     /**
@@ -84,14 +99,10 @@ class EmisoraProgramaController extends Controller
     public function edit($id): View
     {
         $emisoraPrograma = EmisoraPrograma::findOrFail($id);
-
-        // Accede al atributo id_emisora del modelo
         $id_emisora = $emisoraPrograma->id_emisora;
+        $tipoPrograma = TipoPrograma::orderBy('id', 'asc')->paginate(200);
 
-        $emisoraPrograma = EmisoraPrograma::findOrFail($id);
-        $tipoPrograma =  TipoPrograma::orderBy('id', 'asc')->paginate(200);
-
-        return view('emisora-programa.edit', compact('emisoraPrograma','tipoPrograma', 'id_emisora'));
+        return view('emisora-programa.edit', compact('emisoraPrograma', 'tipoPrograma', 'id_emisora'));
     }
 
     /**
@@ -99,41 +110,47 @@ class EmisoraProgramaController extends Controller
      */
     public function update(EmisoraProgramaRequest $request, EmisoraPrograma $emisoraPrograma): RedirectResponse
     {
+        // Obtener los valores de los checkboxes
+        $dias = [
+            'lunes' => $request->input('lunes') ? 1 : 0,
+            'martes' => $request->input('martes') ? 1 : 0,
+            'miercoles' => $request->input('miercoles') ? 1 : 0,
+            'jueves' => $request->input('jueves') ? 1 : 0,
+            'viernes' => $request->input('viernes') ? 1 : 0,
+            'sabado' => $request->input('sabado') ? 1 : 0,
+            'domingo' => $request->input('domingo') ? 1 : 0,
+        ];
 
-         // Obtener los valores de los checkboxes
-        $lunes = $request->input('lunes') ? 1 : 0;
-        $martes = $request->input('martes') ? 1 : 0;
-        $miercoles = $request->input('miercoles') ? 1 : 0;
-        $jueves = $request->input('jueves') ? 1 : 0;
-        $viernes = $request->input('viernes') ? 1 : 0;
-        $sabado = $request->input('sabado') ? 1 : 0;
-        $domingo = $request->input('domingo') ? 1 : 0;
+        // Verificar si el costo ha cambiado
+        if ($request->input('costo') != $emisoraPrograma->costo) {
+            // Crear un nuevo registro en costos_programas con el nuevo costo
+            CostoPrograma::create([
+                'id_programa' => $emisoraPrograma->id, // Usamos el ID del EmisoraPrograma actualizado
+                'costo' => $request->input('costo'),
+                'fecha' => Carbon::now()->toDateString(),
+            ]);
+        }
 
-         // Actualizar el registro de EmisoraPrograma
-        $emisoraPrograma->update(array_merge($request->validated(), [
-            'lunes' => $lunes,
-            'martes' => $martes,
-            'miercoles' => $miercoles,
-            'jueves' => $jueves,
-            'viernes' => $viernes,
-            'sabado' => $sabado,
-            'domingo' => $domingo,
-        ]));
-        
+        // Actualizar el registro de EmisoraPrograma
+        $emisoraPrograma->update(array_merge($request->validated(), $dias));
+
         $id_emisora = $request->input('id_emisora');
 
-      
         // Redirigir a la lista de programas de la emisora
         return Redirect::route('emisora.programas.index', $id_emisora)
-        ->with('success', 'EmisoraPrograma updated successfully.');
+            ->with('success', 'EmisoraPrograma updated successfully.');
     }
 
     public function destroy($id): RedirectResponse
     {
         $emisoraPrograma = EmisoraPrograma::findOrFail($id);
+        $id_programa = $emisoraPrograma->id; // Usamos el ID del EmisoraPrograma a eliminar
         $id_emisora = $emisoraPrograma->id_emisora;
 
-        EmisoraPrograma::findOrFail($id)->delete();
+        // Eliminar todos los costos asociados al programa eliminado
+        CostoPrograma::where('id_programa', $id_programa)->delete();
+
+        $emisoraPrograma->delete();
 
         return Redirect::route('emisora.programas.index', $id_emisora)
             ->with('success', 'EmisoraPrograma deleted successfully');

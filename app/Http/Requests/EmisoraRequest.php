@@ -62,6 +62,9 @@ class EmisoraRequest extends FormRequest
 			'telefono_representante_legal' => 'string',
 			'cantidad_minima' => 'string',
 			'observaciones' => 'string',
+			// --- NUEVAS REGLAS DE VALIDACIÓN ---
+            'emisora_activa' => 'required|boolean', // Debe ser booleano y requerido
+            'observacion_estado_emisora' => 'nullable|string|max:500', // Texto opcional, máximo 500 caracteres
         ];
     }
 }

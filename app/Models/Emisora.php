@@ -55,6 +55,9 @@ class Emisora extends Model
         'representante_legal',
         'telefono_representante_legal',
         'observaciones',
+        // --- NUEVOS CAMPOS ---
+        'emisora_activa', 
+        'observacion_estado_emisora', 
     ];
 
     // Relación con Municipio

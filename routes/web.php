@@ -94,3 +94,7 @@ Route::get('emisoras/fiestas/{fiesta}/edit', [FiestaController::class, 'edit'])-
 Route::put('emisoras/fiestas/{fiesta}', [FiestaController::class, 'update'])->name('emisora.fiestas.update');
 Route::delete('emisoras/fiestas/{fiesta}', [FiestaController::class, 'destroy'])->name('emisora.fiestas.destroy');
 //Route::resource('emisoras.fiestas', FiestaController::class);
+
+
+Route::get('/emisoras/{emisora}/reporte/excel', [EmisoraController::class, 'generarExcel'])->name('emisoras.reporte.excel');
+Route::get('/emisoras/{emisora}/reporte/pdf', [EmisoraController::class, 'generarPdf'])->name('emisoras.reporte.pdf');

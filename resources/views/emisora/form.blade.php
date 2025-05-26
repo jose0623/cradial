@@ -436,6 +436,28 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-2 mb20">
+                    <label for="emisora_activa" class="form-label">{{ __('Emisora Activa') }}</label>
+                    <select name="emisora_activa" id="emisora_activa" class="form-control @error('emisora_activa') is-invalid @enderror">
+                        <option value="">Seleccione...</option>
+                        <option value="1" {{ (isset($emisora) && $emisora->emisora_activa == 1) || old('emisora_activa') === '1' ? 'selected="selected"' : '' }}>Sí</option>
+                        <option value="0" {{ (isset($emisora) && $emisora->emisora_activa == 0) || old('emisora_activa') === '0' ? 'selected="selected"' : '' }}>No</option>
+                    </select>
+                    {!! $errors->first('emisora_activa', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-2 mb20">
+                    <label for="observacion_estado_emisora" class="form-label">{{ __('Observación del Estado de la Emisora') }}</label>
+                    <textarea name="observacion_estado_emisora" id="observacion_estado_emisora" cols="30" rows="3" class="form-control @error('observacion_estado_emisora') is-invalid @enderror" placeholder="Motivo del estado de la emisora">{{ old('observacion_estado_emisora', $emisora?->observacion_estado_emisora) }}</textarea>
+                    {!! $errors->first('observacion_estado_emisora', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                </div>
+            </div>
+        </div>
 
         <br>
         <br>

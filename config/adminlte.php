@@ -321,6 +321,11 @@ return [
             ],
         ],
         [
+            'text' => 'Emisoras',
+            'url' => '/emisoras',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
             'text' => 'Coberturas',
             'icon' => 'fas fa-fw fa-user',
             'submenu' => [

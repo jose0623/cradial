@@ -14,15 +14,10 @@ class FiestaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $id_emisora)//: View
+    public function index(Request $request, $id_emisora)
     {
-       $fiestas = Fiesta::where('id_emisora', $id_emisora)->paginate();;
-
-       return view('fiesta.index', compact('fiestas', 'id_emisora'))
-            ->with('i', ($request->input('page', 1) - 1) * $fiestas->perPage());
-            
-           //return compact('fiestas', 'id_emisora');
-        
+        // Solo pasamos el id_emisora a la vista, el componente Livewire manejará el resto
+        return view('fiesta.index', compact('id_emisora'));
     }
 
 

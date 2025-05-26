@@ -6,22 +6,25 @@ use App\Models\Emisora;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\EmisoraRequest;
+use App\Models\EmisoraPrograma;
+use App\Models\Fiesta;
+use App\Models\Regiones;
 use App\Models\TipoAfiliacione;
 use App\Models\TipoEmisora;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\EmisoraExport; // Creamos esta clase en el siguiente paso
+use Barryvdh\DomPDF\Facade\Pdf; // Si usas DomPDF
 
 class EmisoraController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index()
     {
-        $emisoras = Emisora::paginate();
-
-        return view('emisora.index', compact('emisoras'))
-            ->with('i', ($request->input('page', 1) - 1) * $emisoras->perPage());
+        return view('emisora.index');
     }
 
     /**
@@ -53,11 +56,32 @@ class EmisoraController extends Controller
      */
     public function show($id): View
     {
-        $emisora = Emisora::find($id);
-
-        return view('emisora.show', compact('emisora'));
+        // Obtiene la emisora por su ID, lanza una excepción si no existe.
+        $emisora = Emisora::findOrFail($id);
+    
+        // Obtiene las coberturas de la emisora, incluyendo el municipio y el estado del municipio.
+        $coberturas = Regiones::where('id_emisora', $id)
+            ->orderBy('id', 'desc')
+            ->with(['municipio.estado']) // Eager loads municipio y estado
+            ->get();
+    
+        // Obtiene los programas de la emisora, incluyendo el tipo de programa.
+        $programas = EmisoraPrograma::where('id_emisora', $id)
+            ->orderBy('id', 'desc')
+            ->with('tipoPrograma')  // Eager load tipoPrograma
+            ->get();
+    
+        // Obtiene las fiestas de la emisora.
+        $fiestas = Fiesta::where('id_emisora', $id)
+            ->orderBy('id', 'desc')
+            ->get();
+    
+        // Devuelve los datos de la emisora, coberturas, programas y fiestas.
+        //return  compact('emisora', 'coberturas', 'programas', 'fiestas');
+    
+        return view('emisora.show', compact('emisora', 'coberturas', 'programas', 'fiestas'));
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      */
@@ -89,5 +113,30 @@ class EmisoraController extends Controller
 
         return Redirect::route('emisoras.index')
             ->with('success', 'Emisora deleted successfully');
+    }
+
+
+    public function generarExcel($id)
+    {
+        $emisora = Emisora::findOrFail($id);
+        $coberturas = Regiones::where('id_emisora', $id)->with(['municipio.estado'])->get();
+        $programas = EmisoraPrograma::where('id_emisora', $id)->with('tipoPrograma')->get();
+        $fiestas = Fiesta::where('id_emisora', $id)->get();
+
+        return Excel::download(new EmisoraExport($emisora, $coberturas, $programas, $fiestas), 'reporte_emisora_' . $emisora->name . '.xlsx');
+    }
+
+    
+
+    public function generarPdf($id)
+    {
+        $emisora = Emisora::findOrFail($id);
+        $coberturas = Regiones::where('id_emisora', $id)->with(['municipio.estado'])->get();
+        $programas = EmisoraPrograma::where('id_emisora', $id)->with('tipoPrograma')->get();
+        $fiestas = Fiesta::where('id_emisora', $id)->get();
+
+        $pdf = Pdf::loadView('pdfs.emisora', compact('emisora', 'coberturas', 'programas', 'fiestas'));
+
+        return $pdf->download('reporte_emisora_' . $emisora->name . '.pdf');
     }
 }
