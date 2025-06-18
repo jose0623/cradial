@@ -18,8 +18,14 @@
 
                 <div class="card card-default">
                     <div class="card-header">
-                        <span class="card-title">{{ __('Create') }} Emisora</span>
+                        <span class="card-title">{{ __('Crear') }} Emisora</span>
+                        <div class="float-right">
+                            <a href="{{ route('emisoras.index') }}" class="btn btnbr btn-secondary btn-sm float-right me-2">
+                                {{ __('Regresar a Emisoras') }}
+                            </a>
+                          </div>
                     </div>
+
                     <div class="card-body bg-white">
                         <form method="POST" action="{{ route('emisoras.store') }}"  role="form" enctype="multipart/form-data">
                             @csrf

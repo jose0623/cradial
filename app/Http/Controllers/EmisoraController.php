@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Emisora;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use App\Http\Requests\EmisoraRequest;
 use App\Models\EmisoraPrograma;
 use App\Models\Fiesta;
 use App\Models\Regiones;
@@ -16,6 +13,8 @@ use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\EmisoraExport; // Creamos esta clase en el siguiente paso
 use Barryvdh\DomPDF\Facade\Pdf; // Si usas DomPDF
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\EmisoraRequest;
 
 class EmisoraController extends Controller
 {
@@ -24,6 +23,8 @@ class EmisoraController extends Controller
      */
     public function index()
     {
+        //$this->authorize('access-admin-section');
+
         return view('emisora.index');
     }
 
@@ -33,7 +34,6 @@ class EmisoraController extends Controller
     public function create(): View
     {
         $emisora = new Emisora();
-
         $tipoEmisora = TipoEmisora::orderBy('id', 'desc')->paginate(50);
         $tipoAfiliacione = TipoAfiliacione::orderBy('id', 'asc')->paginate(200);
         return view('emisora.create', compact('emisora', 'tipoEmisora', 'tipoAfiliacione' ));
@@ -44,11 +44,12 @@ class EmisoraController extends Controller
      */
     public function store(EmisoraRequest $request): RedirectResponse
     {   
+
         //return $request->all();
         Emisora::create($request->validated());
 
         return Redirect::route('emisoras.index')
-            ->with('success', 'Emisora created successfully.');
+            ->with('success', 'Emisora ​​creada con éxito.');
     }
 
     /**
@@ -81,7 +82,7 @@ class EmisoraController extends Controller
     
         return view('emisora.show', compact('emisora', 'coberturas', 'programas', 'fiestas'));
     }
-    
+     
     /**
      * Show the form for editing the specified resource.
      */
@@ -104,7 +105,7 @@ class EmisoraController extends Controller
         $emisora->update($request->validated());
 
         return Redirect::route('emisoras.index')
-            ->with('success', 'Emisora updated successfully');
+            ->with('success', 'Emisora ​​actualizada correctamente');
     }
 
     public function destroy($id): RedirectResponse
@@ -112,7 +113,7 @@ class EmisoraController extends Controller
         Emisora::find($id)->delete();
 
         return Redirect::route('emisoras.index')
-            ->with('success', 'Emisora deleted successfully');
+            ->with('success', 'Emisora eliminada exitosamente');
     }
 
 
@@ -139,4 +140,5 @@ class EmisoraController extends Controller
 
         return $pdf->download('reporte_emisora_' . $emisora->name . '.pdf');
     }
+
 }

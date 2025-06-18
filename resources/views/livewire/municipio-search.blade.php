@@ -47,7 +47,7 @@
                             <i class="fa fa-sort"></i>
                         @endif
                     </th>
-                    <th>Estado</th>
+                    <th>Departamento</th>
                     <th style=" text-align: right; padding-right: 34px !important;">Acciones</th>
                 </tr>
             </thead>

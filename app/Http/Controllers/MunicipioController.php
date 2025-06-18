@@ -28,7 +28,7 @@ class MunicipioController extends Controller
     {
         $municipio = new Municipio();
 
-        $estados = Estado::orderBy('id', 'desc')->paginate();
+        $estados = Estado::orderBy('name', 'Asc')->get();
         return view('municipio.create', compact('municipio','estados'));
     }
 

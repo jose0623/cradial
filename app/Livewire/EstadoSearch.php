@@ -58,24 +58,24 @@ class EstadoSearch extends Component
 
     // Método para exportar a PDF
     public function exportPdf()
-{
-    $estados = $this->getQuery()->get()->map(function ($estado) {
-        return [
-            'id' => $estado->id,
-            'name' => $this->sanitizeString($estado->name),
-            'pais' => $this->sanitizeString($estado->paise->name ?? 'N/A')
-        ];
-    });
-    
-    $pdf = PDF::loadView('exports.estados-pdf', [
-        'estados' => $estados,
-        'title' => 'Reporte de Departamentos'
-    ])->setPaper('a4', 'landscape');
-    
-    return response()->streamDownload(function() use ($pdf) {
-        echo $pdf->output();
-    }, 'departamentos_'.now()->format('Y-m-d').'.pdf');
-}
+    {
+        $estados = $this->getQuery()->get()->map(function ($estado) {
+            return [
+                'id' => $estado->id,
+                'name' => $this->sanitizeString($estado->name),
+                'pais' => $this->sanitizeString($estado->paise->name ?? 'N/A')
+            ];
+        });
+        
+        $pdf = PDF::loadView('exports.estados-pdf', [
+            'estados' => $estados,
+            'title' => 'Reporte de Departamentos'
+        ])->setPaper('a4', 'landscape');
+        
+        return response()->streamDownload(function() use ($pdf) {
+            echo $pdf->output();
+        }, 'departamentos_'.now()->format('Y-m-d').'.pdf');
+    }
 
     protected function sanitizeString($string)
     {
@@ -103,5 +103,15 @@ class EstadoSearch extends Component
     {
         $estados = $this->getQuery()->paginate($this->perPage);
         return view('livewire.estado-search', compact('estados'));
+    }
+
+    // Agregar el método confirmDelete
+    public function confirmDelete($id)
+    {
+        $estado = Estado::find($id);
+        if ($estado) {
+            $estado->delete();
+            session()->flash('success', 'Departamento eliminado exitosamente');
+        }
     }
 }

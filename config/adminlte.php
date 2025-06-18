@@ -379,6 +379,11 @@ return [
         ],
         ['header' => 'Administración de Usuarios '],
         [
+            'text' => 'Usuarios (nuevo)',
+            'url'  => '/users',
+            'icon' => 'fas fa-users',
+        ],
+        [
             'text' => 'Usuarios',
             'icon' => 'fas fa-fw fa-user',
             'submenu' => [

@@ -43,7 +43,7 @@ class FiestaController extends Controller
         Fiesta::create($request->validated());
 
         return Redirect::route('emisora.fiestas.index', $id_emisora)
-            ->with('success', 'Fiesta created successfully.');
+            ->with('success', 'Fiesta creada con éxito.');
            
     }
 
@@ -79,7 +79,7 @@ class FiestaController extends Controller
         $id_emisora = $request->input('id_emisora');
 
         return Redirect::route('emisora.fiestas.index', $id_emisora)
-            ->with('success', 'Fiesta updated successfully');
+            ->with('success', 'Fiesta actualizada con éxito');
     }
    
 
@@ -91,6 +91,6 @@ class FiestaController extends Controller
         Fiesta::find($id)->delete();
 
         return Redirect::route('emisora.fiestas.index', $id_emisora)
-            ->with('success', 'Fiesta deleted successfully');
+            ->with('success', 'Fiesta eliminada con éxito');
     }
 }

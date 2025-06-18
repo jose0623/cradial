@@ -17,8 +17,11 @@
                             </span>
 
                              <div class="float-right">
+                                <a href="{{ route('emisoras.index') }}" class="btn btnbr btn-secondary btn-sm float-right me-2">
+                                    {{ __('Regresar a Emisoras') }}
+                                </a>
                                 <a href="{{ route('emisora.fiestas.create', ['id_emisora' => $id_emisora]) }}" class="btn btnbr btn-primary btn-sm float-right">
-                                    {{ __('Create New') }}
+                                    {{ __('Crear nueva') }}
                                 </a>
                               </div>
                         </div>

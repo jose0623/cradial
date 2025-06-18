@@ -24,7 +24,7 @@ class FiestaRequest extends FormRequest
         return [
 			'id_emisora' => 'required',
 			'nombre' => 'required|string',
-			'fecha' => 'required',
+			'fecha' => 'nullable|date',
         ];
     }
 }

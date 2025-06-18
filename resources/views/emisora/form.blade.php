@@ -5,21 +5,21 @@
             <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
                     <label for="name" class="form-label">{{ __('Nombre') }}</label>
-                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $emisora?->name) }}" id="name" placeholder="Name">
+                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $emisora?->name) }}" id="name" placeholder="Name" required>
                     {!! $errors->first('name', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
                     <label for="potencia" class="form-label">{{ __('Potencia') }}</label>
-                    <input type="text" name="potencia" class="form-control @error('potencia') is-invalid @enderror" value="{{ old('potencia', $emisora?->potencia) }}" id="potencia" placeholder="Potencia">
+                    <input type="text" name="potencia" class="form-control @error('potencia') is-invalid @enderror" value="{{ old('potencia', $emisora?->potencia) }}" id="potencia" placeholder="Potencia" required>
                     {!! $errors->first('potencia', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
                     <label for="dial" class="form-label">{{ __('Dial') }}</label>
-                    <input type="text" name="dial" class="form-control @error('dial') is-invalid @enderror" value="{{ old('dial', $emisora?->dial) }}" id="dial" placeholder="Dial">
+                    <input type="text" name="dial" class="form-control @error('dial') is-invalid @enderror" value="{{ old('dial', $emisora?->dial) }}" id="dial" placeholder="Dial" required>
                     {!! $errors->first('dial', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
@@ -35,12 +35,7 @@
                         @foreach ($tipoEmisora as $item)
                            
                         <option 
-                        @if ( $item->id == $emisora->tipo_emisoras_id )
-                        selected="selected"
-                        @endif
-                           
-                            
-                            value="{{ $item->id }}">{{$item->name}}</option>
+                        value="{{ $item->id }}" {{ old('tipo_emisoras_id', $emisora?->tipo_emisoras_id) == $item->id ? 'selected' : '' }}>{{$item->name}}</option>
         
                         @endforeach
         
@@ -53,15 +48,15 @@
                 <div class="form-group mb-2 mb20">
                     <label for="tipo_documento" class="form-label">{{ __('Tipo Documento') }}</label>
         
-                    <select name="tipo_documento" id="tipo_documento" class="form-control">
+                    <select name="tipo_documento" id="tipo_documento" class="form-control" required>
 
 
                         <option value="">Seleccione... </option>
-                        <option value="1" {{ $emisora->tipo_documento == 1 ? 'selected="selected"' : '' }}>NIT</option>
-                        <option value="2" {{ $emisora->tipo_documento == 2 ? 'selected="selected"' : '' }}>C.C</option>
-                        <option value="3" {{ $emisora->tipo_documento == 3 ? 'selected="selected"' : '' }}>C.E.</option>
-                        <option value="4" {{ $emisora->tipo_documento == 4 ? 'selected="selected"' : '' }}>T.I.</option>
-                        <option value="5" {{ $emisora->tipo_documento == 5 ? 'selected="selected"' : '' }}>OTRO</option>
+                        <option value="1" {{ old('tipo_documento', $emisora?->tipo_documento) == 1 ? 'selected' : '' }}>NIT</option>
+                        <option value="2" {{ old('tipo_documento', $emisora?->tipo_documento) == 2 ? 'selected' : '' }}>C.C</option>
+                        <option value="3" {{ old('tipo_documento', $emisora?->tipo_documento) == 3 ? 'selected' : '' }}>C.E.</option>
+                        <option value="4" {{ old('tipo_documento', $emisora?->tipo_documento) == 4 ? 'selected' : '' }}>T.I.</option>
+                        <option value="5" {{ old('tipo_documento', $emisora?->tipo_documento) == 5 ? 'selected' : '' }}>OTRO</option>
                     
                     
                     </select>
@@ -71,7 +66,7 @@
             <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
                     <label for="identificacion" class="form-label">{{ __('Identificacion') }}</label>
-                    <input type="text" name="identificacion" class="form-control @error('identificacion') is-invalid @enderror" value="{{ old('identificacion', $emisora?->identificacion) }}" id="identificacion" placeholder="Identificacion">
+                    <input type="text" name="identificacion" class="form-control @error('identificacion') is-invalid @enderror" value="{{ old('identificacion', $emisora?->identificacion) }}" id="identificacion" placeholder="Identificacion" required>
                     {!! $errors->first('identificacion', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
@@ -82,13 +77,13 @@
         <div class="row">
             
             <div class="col-md-8">
-                @livewire('selectores', ['municipioId' => $emisora->municipio_id])
+                @livewire('selectores', ['municipioId' => $emisora->municipio_id, 'required' => true])
             </div>
 
             <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
                     <label for="direccion" class="form-label">{{ __('Direccion') }}</label>
-                    <input type="text" name="direccion" class="form-control @error('direccion') is-invalid @enderror" value="{{ old('direccion', $emisora?->direccion) }}" id="direccion" placeholder="Direccion">
+                    <input type="text" name="direccion" class="form-control @error('direccion') is-invalid @enderror" value="{{ old('direccion', $emisora?->direccion) }}" id="direccion" placeholder="Direccion" required>
                     {!! $errors->first('direccion', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
@@ -107,8 +102,8 @@
                         <label for="tiene_real_audio" class="form-label">{{ __('Tiene Real Audio') }}</label>
                         <select name="tiene_real_audio" id="tiene_real_audio" class="form-control">
                             <option value="">Seleccione... </option>
-                            <option value="1" {{ $emisora->tiene_real_audio == 1 ? 'selected="selected"' : '' }} >Si</option>
-                            <option value="0" {{ $emisora->tiene_real_audio == 0 ? 'selected="selected"' : '' }} >No</option>
+                            <option value="1" {{ old('tiene_real_audio', $emisora?->tiene_real_audio) == 1 ? 'selected' : '' }} >Si</option>
+                            <option value="0" {{ old('tiene_real_audio', $emisora?->tiene_real_audio) == 0 ? 'selected' : '' }} >No</option>
                         </select>
                         {!! $errors->first('tiene_real_audio', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                     </div>
@@ -138,8 +133,8 @@
                     
                     <select name="utiliza_remoto" id="utiliza_remoto" class="form-control">
                         <option value="">Seleccione... </option>
-                        <option value="1" {{ $emisora->utiliza_remoto == 1 ? 'selected="selected"' : '' }} >Si</option>
-                        <option value="0" {{ $emisora->utiliza_remoto == 0 ? 'selected="selected"' : '' }} >No</option>
+                        <option value="1" {{ old('utiliza_remoto', $emisora?->utiliza_remoto) == 1 ? 'selected' : '' }} >Si</option>
+                        <option value="0" {{ old('utiliza_remoto', $emisora?->utiliza_remoto) == 0 ? 'selected' : '' }} >No</option>
                     </select>
                     {!! $errors->first('utiliza_remoto', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
@@ -175,8 +170,8 @@
                     <label for="utiliza_perifoneo" class="form-label">{{ __('Utiliza Perifoneo') }}</label>
                     <select name="utiliza_perifoneo" id="utiliza_perifoneo" class="form-control">
                         <option value="">Seleccione... </option>
-                        <option value="1" {{ $emisora->utiliza_perifoneo == 1 ? 'selected="selected"' : '' }}>Si</option>
-                        <option value="0" {{ $emisora->utiliza_perifoneo == 0 ? 'selected="selected"' : '' }}>No</option>
+                        <option value="1" {{ old('utiliza_perifoneo', $emisora?->utiliza_perifoneo) == 1 ? 'selected' : '' }}>Si</option>
+                        <option value="0" {{ old('utiliza_perifoneo', $emisora?->utiliza_perifoneo) == 0 ? 'selected' : '' }}>No</option>
                     </select>
                     {!! $errors->first('utiliza_perifoneo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
@@ -240,12 +235,7 @@
                     @foreach ($tipoAfiliacione as $item)
                        
                     <option 
-                    @if ( $item->id == $emisora->afiliacion_id )
-                    selected="selected"
-                    @endif
-                       
-                        
-                        value="{{ $item->id }}">{{$item->name}}</option>
+                    value="{{ $item->id }}" {{ old('afiliacion_id', $emisora?->afiliacion_id) == $item->id ? 'selected' : '' }}>{{$item->name}}</option>
     
                     @endforeach
     
@@ -268,10 +258,10 @@
         <div class="col-md-3">
             <div class="form-group mb-2 mb20">
                 <label for="iva" class="form-label">{{ __('Iva') }}</label>
-                <select name="iva" id="iva" class="form-control">
+                <select name="iva" id="iva" class="form-control" required>
                     <option value="">Seleccione... </option>
-                    <option value="1" {{ $emisora->iva == 1 ? 'selected="selected"' : '' }} >Si</option>
-                    <option value="0" {{ $emisora->iva == 0 ? 'selected="selected"' : '' }} >No</option>
+                    <option value="1" {{ old('iva', $emisora?->iva) == 1 ? 'selected' : '' }} >Si</option>
+                    <option value="0" {{ old('iva', $emisora?->iva) == 0 ? 'selected' : '' }} >No</option>
                 </select>
                 {!! $errors->first('iva', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
             </div>
@@ -335,7 +325,7 @@
             <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
                     <label for="email" class="form-label">{{ __('Email') }}</label>
-                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $emisora?->email) }}" id="email" placeholder="Email">
+                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $emisora?->email) }}" id="email" placeholder="Email" required>
                     {!! $errors->first('email', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
@@ -358,7 +348,7 @@
             <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
                     <label for="telefono1" class="form-label">{{ __('Telefono') }}</label>
-                    <input type="tel" name="telefono1" class="form-control @error('telefono1') is-invalid @enderror" value="{{ old('telefono1', $emisora?->telefono1) }}" id="telefono1" placeholder="Telefono">
+                    <input type="tel" name="telefono1" class="form-control @error('telefono1') is-invalid @enderror" value="{{ old('telefono1', $emisora?->telefono1) }}" id="telefono1" placeholder="Teléfono" required>
                     {!! $errors->first('telefono1', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
@@ -366,7 +356,7 @@
             <div class="col-md-4">
                 <div class="form-group mb-2 mb20">
                     <label for="celular" class="form-label">{{ __('Celular') }}</label>
-                    <input type="tel" name="celular" class="form-control @error('celular') is-invalid @enderror" value="{{ old('celular', $emisora?->celular) }}" id="celular" placeholder="Celular">
+                    <input type="tel" name="celular" class="form-control @error('celular') is-invalid @enderror" value="{{ old('celular', $emisora?->celular) }}" id="celular" placeholder="Celular" required>
                     {!! $errors->first('celular', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
@@ -379,28 +369,28 @@
             <div class="col-md-3">
                 <div class="form-group mb-2 mb20">
                     <label for="gerente" class="form-label">{{ __('Gerente') }}</label>
-                    <input type="text" name="gerente" class="form-control @error('gerente') is-invalid @enderror" value="{{ old('gerente', $emisora?->gerente) }}" id="gerente" placeholder="Gerente">
+                    <input type="text" name="gerente" class="form-control @error('gerente') is-invalid @enderror" value="{{ old('gerente', $emisora?->gerente) }}" id="gerente" placeholder="Gerente" required>
                     {!! $errors->first('gerente', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group mb-2 mb20">
                     <label for="telefono_gerente" class="form-label">{{ __('Telefono del Gerente') }}</label>
-                    <input type="tel" name="telefono_gerente" class="form-control @error('telefono_gerente') is-invalid @enderror" value="{{ old('telefono_gerente', $emisora?->telefono_gerente) }}" id="telefono_gerente" placeholder="Telefono del Gerente">
+                    <input type="tel" name="telefono_gerente" class="form-control @error('telefono_gerente') is-invalid @enderror" value="{{ old('telefono_gerente', $emisora?->telefono_gerente) }}" id="telefono_gerente" placeholder="Teléfono del Gerente" required>
                     {!! $errors->first('telefono_gerente', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group mb-2 mb20">
                     <label for="director_noticias" class="form-label">{{ __('Director Noticias') }}</label>
-                    <input type="text" name="director_noticias" class="form-control @error('director_noticias') is-invalid @enderror" value="{{ old('director_noticias', $emisora?->director_noticias) }}" id="director_noticias" placeholder="Director Noticias">
+                    <input type="text" name="director_noticias" class="form-control @error('director_noticias') is-invalid @enderror" value="{{ old('director_noticias', $emisora?->director_noticias) }}" id="director_noticias" placeholder="Director Noticias" required>
                     {!! $errors->first('director_noticias', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group mb-2 mb20">
                     <label for="telefono_director_noticias" class="form-label">{{ __('Telefono del Director Noticias') }}</label>
-                    <input type="tel" name="telefono_director_noticias" class="form-control @error('telefono_director_noticias') is-invalid @enderror" value="{{ old('telefono_director_noticias', $emisora?->telefono_director_noticias) }}" id="telefono_director_noticias" placeholder="Telefono del Director Noticias">
+                    <input type="tel" name="telefono_director_noticias" class="form-control @error('telefono_director_noticias') is-invalid @enderror" value="{{ old('telefono_director_noticias', $emisora?->telefono_director_noticias) }}" id="telefono_director_noticias" placeholder="Teléfono del Director Noticias" required>
                     {!! $errors->first('telefono_director_noticias', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
@@ -410,14 +400,14 @@
             <div class="col-md-3">
                 <div class="form-group mb-2 mb20">
                     <label for="encargado_pauta" class="form-label">{{ __('Encargado de Pauta') }}</label>
-                    <input type="text" name="encargado_pauta" class="form-control @error('encargado_pauta') is-invalid @enderror" value="{{ old('encargado_pauta', $emisora?->encargado_pauta) }}" id="encargado_pauta" placeholder="Encargado de pauta">
+                    <input type="text" name="encargado_pauta" class="form-control @error('encargado_pauta') is-invalid @enderror" value="{{ old('encargado_pauta', $emisora?->encargado_pauta) }}" id="encargado_pauta" placeholder="Encargado de Pauta" required>
                     {!! $errors->first('encargado_pauta', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group mb-2 mb20">
                     <label for="telefono_encargado_pauta" class="form-label">{{ __('Telefono del Encargado de Pauta') }}</label>
-                    <input type="tel" name="telefono_encargado_pauta" class="form-control @error('telefono_encargado_pauta') is-invalid @enderror" value="{{ old('telefono_encargado_pauta', $emisora?->telefono_encargado_pauta) }}" id="telefono_encargado_pauta" placeholder="Telefono del Encargado de Pauta">
+                    <input type="tel" name="telefono_encargado_pauta" class="form-control @error('telefono_encargado_pauta') is-invalid @enderror" value="{{ old('telefono_encargado_pauta', $emisora?->telefono_encargado_pauta) }}" id="telefono_encargado_pauta" placeholder="Teléfono del Encargado de Pauta" required>
                     {!! $errors->first('telefono_encargado_pauta', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
@@ -440,10 +430,10 @@
             <div class="col-md-6">
                 <div class="form-group mb-2 mb20">
                     <label for="emisora_activa" class="form-label">{{ __('Emisora Activa') }}</label>
-                    <select name="emisora_activa" id="emisora_activa" class="form-control @error('emisora_activa') is-invalid @enderror">
+                    <select name="emisora_activa" id="emisora_activa" class="form-control @error('emisora_activa') is-invalid @enderror" required>
                         <option value="">Seleccione...</option>
-                        <option value="1" {{ (isset($emisora) && $emisora->emisora_activa == 1) || old('emisora_activa') === '1' ? 'selected="selected"' : '' }}>Sí</option>
-                        <option value="0" {{ (isset($emisora) && $emisora->emisora_activa == 0) || old('emisora_activa') === '0' ? 'selected="selected"' : '' }}>No</option>
+                        <option value="1" {{ old('emisora_activa', $emisora?->emisora_activa) === 1 ? 'selected' : '' }}>Sí</option>
+                        <option value="0" {{ old('emisora_activa', $emisora?->emisora_activa) === 0 ? 'selected' : '' }}>No</option>
                     </select>
                     {!! $errors->first('emisora_activa', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>

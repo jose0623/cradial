@@ -15,6 +15,11 @@
             @foreach ($emisoras as $emisora)
         @endforeach
 
+            <a href="{{ route('emisoras.index') }}" class=" btn btnbr btn-secondary btn-sm float-right me-2" style="
+            max-width: max-content;
+        ">
+                {{ __('Regresar a Emisoras') }}
+            </a>  
         </div>
     </div>
     <br>
@@ -35,7 +40,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div>
-                                    <label for="estado_id">Estado:</label>
+                                    <label for="estado_id">Departamento:</label>
                                     <select class="form-control" wire:model.live="estado_id" id="estado_id">
                                         <option value="">Selecciona un estado</option>
                                         @foreach ($estados as $estado)
@@ -85,7 +90,7 @@
                                 <tr>
             
                                 <th>No</th>
-                                <th >Estado</th>
+                                <th >Departamento</th>
                                 <th >Municipios</th>
                                 <th>Porcentaje de Cobertura </th>
                                 <th>Acciones</th>

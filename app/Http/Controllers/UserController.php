@@ -3,82 +3,110 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\UserRequest;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request): View
+    public function __construct()
     {
-        $users = User::paginate();
-
-        return view('user.index', compact('users'))
-            ->with('i', ($request->input('page', 1) - 1) * $users->perPage());
+        $this->middleware('auth');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): View
+    public function index()
     {
-        $user = new User();
-
-        return view('user.create', compact('user'));
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'No tienes permisos de administrador.');
+        }
+        $users = User::paginate(10);
+        return view('users.index', compact('users'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(UserRequest $request): RedirectResponse
+    public function create()
     {
-        User::create($request->validated());
-
-        return Redirect::route('users.index')
-            ->with('success', 'User created successfully.');
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'No tienes permisos de administrador.');
+        }
+        return view('users.create');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id): View
+    public function store(Request $request)
     {
-        $user = User::find($id);
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'No tienes permisos de administrador.');
+        }
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+            'role' => ['required', 'string', 'in:admin,editor,user'],
+        ]);
 
-        return view('user.show', compact('user'));
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+
+        return redirect()->route('users.index')
+            ->with('success', 'Usuario creado exitosamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id): View
+    public function edit(User $user)
     {
-        $user = User::find($id);
-
-        return view('user.edit', compact('user'));
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'No tienes permisos de administrador.');
+        }
+        return view('users.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UserRequest $request, User $user): RedirectResponse
+    public function update(Request $request, User $user)
     {
-        $user->update($request->validated());
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'No tienes permisos de administrador.');
+        }
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'role' => ['required', 'string', 'in:admin,editor,user'],
+        ]);
 
-        return Redirect::route('users.index')
-            ->with('success', 'User updated successfully');
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+        ]);
+
+        if ($request->filled('password')) {
+            $request->validate([
+                'password' => ['confirmed', Password::defaults()],
+            ]);
+
+            $user->update([
+                'password' => Hash::make($request->password),
+            ]);
+        }
+
+        return redirect()->route('users.index')
+            ->with('success', 'Usuario actualizado exitosamente.');
     }
 
-    public function destroy($id): RedirectResponse
+    public function destroy(User $user)
     {
-        User::find($id)->delete();
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            abort(403, 'No tienes permisos de administrador.');
+        }
+        if ($user->id === Auth::id()) {
+            return redirect()->route('users.index')
+                ->with('error', 'No puedes eliminar tu propio usuario.');
+        }
 
-        return Redirect::route('users.index')
-            ->with('success', 'User deleted successfully');
+        $user->delete();
+
+        return redirect()->route('users.index')
+            ->with('success', 'Usuario eliminado exitosamente.');
     }
 }

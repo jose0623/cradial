@@ -8,57 +8,58 @@
     <section class="content container-fluid">
         <div class="row">
             <div class="col-md-12">
+                <br>
                 <div class="card">
                     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="float-left">
-                            <span class="card-title">{{ __('Ver') }} Emisora Programa</span>
+                            <span class="card-title">Programa</span>
                         </div>
                         <div class="float-right">
-                            <a class="btn btn-primary btn-sm" href="{{ route('emisora.programas.index', ['id_emisora' =>  $emisoraPrograma->id_emisora  ] ) }}"> {{ __('Regresar') }}</a>
+                            <a class="btn btn-primary btnbr btn-sm" href="{{ route('emisora.programas.index', ['id_emisora' =>  $emisoraPrograma->id_emisora  ] ) }}"> {{ __('Regresar') }}</a>
                         </div>
                     </div>
 
                     <div class="card-body bg-white">
 
                         <div class="form-group mb-2 mb20">
-                            <strong>Id Emisora:</strong>
-                            {{ $emisoraPrograma->id_emisora }}
+                            <strong>Emisora:</strong>
+                            {{ $emisoraPrograma->emisora->name }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Nombre Programa:</strong>
                             {{ $emisoraPrograma->nombre_programa }}
                         </div>
                         <div class="form-group mb-2 mb20">
-                            <strong>Tipo Programa Id:</strong>
-                            {{ $emisoraPrograma->tipo_programa_id }}
+                            <strong>Tipo de Programa:</strong>
+                            {{ $emisoraPrograma->tipoPrograma->name }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Lunes:</strong>
-                            {{ $emisoraPrograma->lunes }}
+                            {{ $emisoraPrograma->lunes == 1 ? 'Sí' : 'No' }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Martes:</strong>
-                            {{ $emisoraPrograma->martes }}
+                            {{ $emisoraPrograma->martes == 1 ? 'Sí' : 'No' }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Miercoles:</strong>
-                            {{ $emisoraPrograma->miercoles }}
+                            {{ $emisoraPrograma->miercoles == 1 ? 'Sí' : 'No' }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Jueves:</strong>
-                            {{ $emisoraPrograma->jueves }}
+                            {{ $emisoraPrograma->jueves == 1 ? 'Sí' : 'No' }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Viernes:</strong>
-                            {{ $emisoraPrograma->viernes }}
+                            {{ $emisoraPrograma->viernes == 1 ? 'Sí' : 'No' }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Sabado:</strong>
-                            {{ $emisoraPrograma->sabado }}
+                            {{ $emisoraPrograma->sabado == 1 ? 'Sí' : 'No' }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Domingo:</strong>
-                            {{ $emisoraPrograma->domingo }}
+                            {{ $emisoraPrograma->domingo == 1 ? 'Sí' : 'No' }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Horario:</strong>
@@ -70,7 +71,7 @@
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Activo:</strong>
-                            {{ $emisoraPrograma->activo }}
+                            {{ $emisoraPrograma->activo == 1 ? 'Sí' : 'No' }}
                         </div>
                         <div class="form-group mb-2 mb20">
                             <strong>Costo Actual:</strong>

@@ -17,7 +17,7 @@
     .float-right a.btn.btnbr.btn-sm, .float-right .btnCreate {
         display: block;
         text-align: right;
-        margin: 0 0 0 auto;
+        margin: 0 4px 0 auto;
         width: max-content;
     }
     td.float-right form {

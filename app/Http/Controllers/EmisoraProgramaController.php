@@ -74,7 +74,7 @@ class EmisoraProgramaController extends Controller
 
         // Redirigir a la lista de programas de la emisora
         return Redirect::route('emisora.programas.index', $id_emisora)
-            ->with('success', 'EmisoraPrograma created successfully.');
+            ->with('success', 'Programa creado con éxito.');
     }
 
     /**
@@ -138,7 +138,7 @@ class EmisoraProgramaController extends Controller
 
         // Redirigir a la lista de programas de la emisora
         return Redirect::route('emisora.programas.index', $id_emisora)
-            ->with('success', 'EmisoraPrograma updated successfully.');
+            ->with('success', 'Programa actualizado exitosamente.');
     }
 
     public function destroy($id): RedirectResponse
@@ -153,6 +153,6 @@ class EmisoraProgramaController extends Controller
         $emisoraPrograma->delete();
 
         return Redirect::route('emisora.programas.index', $id_emisora)
-            ->with('success', 'EmisoraPrograma deleted successfully');
+            ->with('success', 'Programa eliminado exitosamente');
     }
 }
