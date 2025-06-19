@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('emisora_programas', function (Blueprint $table) {
-            $table->float('costo')->nullable(); // Cambiado a float
-            $table->float('venta')->nullable()->after('costo'); // Agrega el campo venta después de costo
+            $table->float('venta')->nullable()->after('costo');
         });
     }
 
@@ -23,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('emisora_programas', function (Blueprint $table) {
-            $table->dropColumn('costo'); // Elimina la columna costo
-            $table->dropColumn('venta'); // Elimina la columna venta
+            $table->dropColumn('venta');
         });
     }
 };

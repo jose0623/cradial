@@ -144,7 +144,7 @@
             <div>
                 <div class="form-group mb-2 mb20">
                     <label for="precio" class="form-label">{{ __('Precio Base') }}</label>
-                    <input wire:model.live="precio_base" type="text" name="precio" class="form-control" value=" {{ $programaSeleccionado->costo }}" readonly>
+                    <input wire:model.live="precio_base" type="text" name="precio" class="form-control" value=" {{ $programaSeleccionado->costo }} | {{ $programaSeleccionado->venta }} " readonly>
                 </div>
             </div>
         </div>

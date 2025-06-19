@@ -24,7 +24,8 @@ class EmisoraPrograma extends Model
         'horario',
         'nombre_locutor',
         'activo',
-        'costo'
+        'costo',
+        'venta'
     ];
 
     public function emisora()

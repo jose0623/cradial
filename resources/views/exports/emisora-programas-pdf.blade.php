@@ -33,6 +33,7 @@
                 <th>Locutor</th>
                 <th>Activo</th>
                 <th>Costo</th>
+                <th>Venta</th>
             </tr>
         </thead>
         <tbody>
@@ -46,6 +47,7 @@
                 <td>{{ $programa['locutor'] }}</td>
                 <td>{{ $programa['activo'] }}</td>
                 <td>{{ $programa['costo'] }}</td>
+                <td>{{ $programa['venta'] }}</td>
             </tr>
             @endforeach
         </tbody>

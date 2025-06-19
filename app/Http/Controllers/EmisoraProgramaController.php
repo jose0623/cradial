@@ -69,6 +69,7 @@ class EmisoraProgramaController extends Controller
         CostoPrograma::create([
             'id_programa' => $emisoraPrograma->id, // Usamos el ID del EmisoraPrograma creado
             'costo' => $request->input('costo'),
+            'venta' => $request->input('venta'),
             'fecha' => Carbon::now()->toDateString(),
         ]);
 
@@ -127,6 +128,7 @@ class EmisoraProgramaController extends Controller
             CostoPrograma::create([
                 'id_programa' => $emisoraPrograma->id, // Usamos el ID del EmisoraPrograma actualizado
                 'costo' => $request->input('costo'),
+                'venta' => $request->input('venta'),
                 'fecha' => Carbon::now()->toDateString(),
             ]);
         }

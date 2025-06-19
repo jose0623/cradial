@@ -54,7 +54,8 @@ class EmisoraProgramasExport implements FromQuery, WithHeadings, WithMapping
             'Horario',
             'Locutor',
             'Activo',
-            'Costo'
+            'Costo',
+            'Venta'
         ];
     }
 
@@ -74,7 +75,8 @@ class EmisoraProgramasExport implements FromQuery, WithHeadings, WithMapping
             $programa->horario,
             $programa->nombre_locutor,
             $programa->activo ? 'Sí' : 'No',
-            $programa->costo
+            $programa->costo,
+            $programa->venta
         ];
     }
 }

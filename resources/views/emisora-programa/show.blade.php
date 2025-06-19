@@ -77,6 +77,10 @@
                             <strong>Costo Actual:</strong>
                             {{ $emisoraPrograma->costo }}
                         </div>
+                        <div class="form-group mb-2 mb20">
+                            <strong>Venta Actual:</strong>
+                            {{ $emisoraPrograma->venta }}
+                        </div>
 
                         <div class="mt-4">
                             <h5>Historial de Precios (Últimos 10)</h5>

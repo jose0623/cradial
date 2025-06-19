@@ -31,6 +31,7 @@ class EmisoraProgramaRequest extends FormRequest
             'nombre_locutor' => 'required|string',
             'activo' => 'required',
             'costo' => 'required',
+            'venta' => 'required|numeric|min:0',
             'lunes' => 'nullable|boolean',
             'martes' => 'nullable|boolean',
             'miercoles' => 'nullable|boolean',

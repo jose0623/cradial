@@ -49,7 +49,22 @@
                     {!! $errors->first('nombre_locutor', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
-            <div class="col-md-4">
+           
+            <div class="col-md-3">
+                <div class="form-group mb-2 mb20">
+                    <label for="costo" class="form-label">{{ __('Costo') }}</label>
+                    <input type="number" name="costo" class="form-control @error('costo') is-invalid @enderror" value="{{ old('costo', $emisoraPrograma?->costo) }}" id="costo" step="0.01" placeholder="0.00">
+                    {!! $errors->first('costo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group mb-2 mb20">
+                    <label for="venta" class="form-label ">{{ __('Venta') }}</label>
+                    <input type="number" name="venta" class="form-control @error('venta') is-invalid @enderror" value="{{ old('venta', $emisoraPrograma?->venta) }}" id="venta" step="0.01" placeholder="0.00">
+                    {!! $errors->first('venta', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                </div>
+            </div>
+            <div class="col-md-2">
                 <div class="form-group mb-2 mb20">
                     <label for="activo" class="form-label">{{ __('Activo') }}</label>
 
@@ -75,13 +90,6 @@
 
                   
                     {!! $errors->first('activo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group mb-2 mb20">
-                    <label for="costo" class="form-label">{{ __('Costo') }}</label>
-                    <input type="number" name="costo" class="form-control @error('costo') is-invalid @enderror" value="{{ old('costo', $emisoraPrograma?->costo) }}" id="costo" step="0.01" placeholder="0.00">
-                    {!! $errors->first('costo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                 </div>
             </div>
 

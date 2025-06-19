@@ -253,6 +253,7 @@
             <th>Tipo</th>
             <th>Horario</th>
             <th>Tarifa</th>
+            <th>Venta</th>
             <th>Días</th>
         </tr>
     </thead>
@@ -264,6 +265,7 @@
                 <td>{{ $programa->tipoPrograma->name }}</td>
                 <td>{{ $programa->horario }}</td>
                 <td>{{ $programa->costo }}</td>
+                <td>{{ $programa->venta }}</td>
                 <td>
                     <small>
                         {{ $programa->lunes ? 'LU ' : '' }}
@@ -277,7 +279,7 @@
                 </td>
             </tr>
         @empty
-            <tr><td colspan="6">No hay programas registrados.</td></tr>
+            <tr><td colspan="7">No hay programas registrados.</td></tr>
         @endforelse
     </tbody>
 </table>

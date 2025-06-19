@@ -81,6 +81,7 @@
                             <i class="fa fa-sort"></i>
                         @endif
                     </th>
+                    <th wire:click="sortBy('venta')" style="cursor: pointer;">Venta</th>
                     <th style="text-align: right;">Acciones</th>
                 </tr>
             </thead>
@@ -101,6 +102,7 @@
                         <td>{{ $emisoraPrograma->nombre_locutor }}</td>
                         <td>{{ $emisoraPrograma->activo ? '✓' : '' }}</td>
                         <td>{{ number_format($emisoraPrograma->costo, 2) }}</td>
+                        <td>{{ number_format($emisoraPrograma->venta, 2) }}</td>
                         <td style="min-width: 240px;text-align: right;">
                             <form action="{{ route('emisora.programas.destroy', $emisoraPrograma->id) }}" method="POST"  style="margin: 0;">
                                 <a class="btn btn-sm btn-primary " href="{{ route('emisora.programas.show', $emisoraPrograma->id) }}">

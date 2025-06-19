@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Precio Base:</strong>
-                                    {{ $reporteItem->programa->costo }}
+                                    {{ $reporteItem->programa->costo }} | {{ $reporteItem->programa->venta }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Bonificacion:</strong>
