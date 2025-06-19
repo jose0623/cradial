@@ -15,14 +15,18 @@ class Selectores extends Component
 
     public function mount($municipioId = null) // Recibe el ID del municipio
     {
-        $this->estados = Estado::all();
+        // Ordenar los estados alfabéticamente por nombre
+        $this->estados = Estado::orderBy('name')->get();
     
         if ($municipioId) {
             $municipio = Municipio::find($municipioId);
             if ($municipio) {
                 $this->municipioSeleccionado = $municipioId;
                 $this->estadoSeleccionado = $municipio->estado_id;
-                $this->municipios = Municipio::where('estado_id', $this->estadoSeleccionado)->get();
+                // Ordenar los municipios alfabéticamente por nombre
+                $this->municipios = Municipio::where('estado_id', $this->estadoSeleccionado)
+                    ->orderBy('name')
+                    ->get();
             }
         } else {
             $this->municipios = [];
@@ -34,7 +38,10 @@ class Selectores extends Component
         logger('Estado seleccionado: ' . $estadoId);
         
         if ($estadoId) {
-            $this->municipios = Municipio::where('estado_id', $estadoId)->get();
+            // Ordenar los municipios alfabéticamente por nombre
+            $this->municipios = Municipio::where('estado_id', $estadoId)
+                ->orderBy('name')
+                ->get();
         } else {
             $this->municipios = collect([]); // Inicializar como una colección vacía
         }

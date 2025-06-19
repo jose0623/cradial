@@ -12,6 +12,7 @@
                 {!! $errors->first('estado_id', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
             </div>
         </div>
+        
 
         <div class="col-md-6">
             <div class="form-group mb-2 mb20">
