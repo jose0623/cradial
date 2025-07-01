@@ -87,7 +87,17 @@ class ReporteController extends Controller
      */
     public function update(ReporteRequest $request, Reporte $reporte): RedirectResponse
     {
-        $reporte->update($request->validated());
+        $datos = $request->validated();
+        $estado_nuevo = $datos['estado'] ?? $reporte->estado;
+        $estado_anterior = $reporte->estado;
+
+        // Si el estado cambia y NO es 'borrador', incrementa codigo_propuesta
+        if ($estado_nuevo !== 'borrador' && $estado_anterior === 'borrador') {
+            $reporte->codigo_propuesta = ($reporte->codigo_propuesta ?? 0) + 1;
+        }
+
+        $reporte->fill($datos);
+        $reporte->save();
 
         return Redirect::route('reportes.index')
             ->with('success', 'Reporte updated successfully');

@@ -1,10 +1,9 @@
-@extends('layouts.app')
+<?php $__env->startSection('template_title'); ?>
+    <?php echo e($reporteItem->name ?? __('Show') . " " . __('Reporte Item')); ?>
 
-@section('template_title')
-    {{ $reporteItem->name ?? __('Show') . " " . __('Reporte Item') }}
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <section class="content container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -13,21 +12,21 @@
                     <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="" style="text-align: left">
 
-                            @php
+                            <?php
                                 $reporte = $reporteItem->reporte;
-                            @endphp
-                            <b>Reporte N: </b> {{ $reporte->id }}-{{ $reporte->codigo_propuesta }} <br>
-                            <b> Vigencia desde: </b> <span style="color: red"> {{ $vigencia_desde }} </span> -- <b> hasta: </b> <span style="color: red"> {{ $vigencia_hasta  }} </span><br>
-                            {{-- Subtotal dinámico --}}
-                            @php
+                            ?>
+                            <b>Reporte N: </b> <?php echo e($reporte->id); ?>-<?php echo e($reporte->codigo_propuesta); ?> <br>
+                            <b> Vigencia desde: </b> <span style="color: red"> <?php echo e($vigencia_desde); ?> </span> -- <b> hasta: </b> <span style="color: red"> <?php echo e($vigencia_hasta); ?> </span><br>
+                            
+                            <?php
                                 $subtotal = $reporte->reporteItems->sum('precio_base');
-                            @endphp
-                            <b> SubTotal : </b> <span style="color: red"> {{ number_format($subtotal, 2) }} </span> -- <b> Total : </b> <span style="color: red"> {{ number_format($total, 2) }} </span>
+                            ?>
+                            <b> SubTotal : </b> <span style="color: red"> <?php echo e(number_format($subtotal, 2)); ?> </span> -- <b> Total : </b> <span style="color: red"> <?php echo e(number_format($total, 2)); ?> </span>
                             
                         </div>
 
                         <div class="float-right">
-                            <a class="btn btn-primary btn-sm" href="{{ route('reporte-items.index') }}"> {{ __('Regresar') }}</a>
+                            <a class="btn btn-primary btn-sm" href="<?php echo e(route('reporte-items.index')); ?>"> <?php echo e(__('Regresar')); ?></a>
                         </div>
                     </div>
 
@@ -36,138 +35,158 @@
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Emisora:</strong>
-                                    {{ $reporteItem->emisora->name }}
+                                    <?php echo e($reporteItem->emisora->name); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Direccion de Emisora:</strong>
-                                    {{ $direccionEmisora }} <b> Municipio: </b> {{ $municipioEmisora }}  <b>Departamento:</b> {{ $estadoEmisora }}
+                                    <?php echo e($direccionEmisora); ?> <b> Municipio: </b> <?php echo e($municipioEmisora); ?>  <b>Departamento:</b> <?php echo e($estadoEmisora); ?>
+
                                 </div>
                                 <strong>Cobertura de la Emisora:</strong>
-                                @if ($municipiosCobertura->isNotEmpty())
+                                <?php if($municipiosCobertura->isNotEmpty()): ?>
                                     <ul>
-                                        @foreach ($municipiosCobertura->groupBy('estado.name') as $estado => $municipios)
+                                        <?php $__currentLoopData = $municipiosCobertura->groupBy('estado.name'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $estado => $municipios): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <li>
-                                                <strong>{{ $estado }}</strong>
+                                                <strong><?php echo e($estado); ?></strong>
                                                 <ul>
                                                     <li>
                                                     
-                                                    @foreach ($municipios as $municipio)
-                                                            {{ $municipio->name }}, 
-                                                    @endforeach
+                                                    <?php $__currentLoopData = $municipios; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $municipio): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                            <?php echo e($municipio->name); ?>, 
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </li>
                                                 </ul>
                                             </li>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </ul>
-                                @else
+                                <?php else: ?>
                                     <p>Esta emisora no tiene cobertura registrada en otras regiones.</p>
-                                @endif
+                                <?php endif; ?>
                         
 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Programa:</strong>
-                                    {{ $reporteItem->programa->nombre_programa }}
+                                    <?php echo e($reporteItem->programa->nombre_programa); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Locutor:</strong>
-                                    {{ $reporteItem->programa->nombre_locutor }}
+                                    <?php echo e($reporteItem->programa->nombre_locutor); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Tipo de Pauta:</strong>
-                                    {{ $reporteItem->tipo_cuna == 1 ? 'Cuña' : ($reporteItem->tipo_cuna == 2 ? 'Mención' : $reporteItem->tipo_cuna) }}
+                                    <?php echo e($reporteItem->tipo_cuna == 1 ? 'Cuña' : ($reporteItem->tipo_cuna == 2 ? 'Mención' : $reporteItem->tipo_cuna)); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Duracion:</strong>
-                                    @if ($reporteItem->duracion == '30%' )
+                                    <?php if($reporteItem->duracion == '30%' ): ?>
                                     5s
-                                @elseif ($reporteItem->duracion == '50%' )
+                                <?php elseif($reporteItem->duracion == '50%' ): ?>
                                     10s
-                                @elseif ($reporteItem->duracion == '60%' )
+                                <?php elseif($reporteItem->duracion == '60%' ): ?>
                                     15s
-                                @elseif ($reporteItem->duracion == '75%' )
+                                <?php elseif($reporteItem->duracion == '75%' ): ?>
                                     20s
-                                @elseif ($reporteItem->duracion == '85%' )
+                                <?php elseif($reporteItem->duracion == '85%' ): ?>
                                     25s
-                                @elseif ($reporteItem->duracion == '100%' )
+                                <?php elseif($reporteItem->duracion == '100%' ): ?>
                                     30s
-                                @elseif ($reporteItem->duracion == '120%' )
+                                <?php elseif($reporteItem->duracion == '120%' ): ?>
                                     35s
-                                @elseif ($reporteItem->duracion == '133%' )
+                                <?php elseif($reporteItem->duracion == '133%' ): ?>
                                     40s
-                                @elseif ($reporteItem->duracion == '150%' )
+                                <?php elseif($reporteItem->duracion == '150%' ): ?>
                                     45s
-                                @elseif ($reporteItem->duracion == '170%' )
+                                <?php elseif($reporteItem->duracion == '170%' ): ?>
                                     50s
-                                @elseif ($reporteItem->duracion == '185%' )
+                                <?php elseif($reporteItem->duracion == '185%' ): ?>
                                     55s
-                                @elseif ($reporteItem->duracion == '200%' )
+                                <?php elseif($reporteItem->duracion == '200%' ): ?>
                                     1min
-                                @else
-                                {{ $reporteItem->duracion }} {{-- Muestra el valor original --}}
-                                @endif
+                                <?php else: ?>
+                                <?php echo e($reporteItem->duracion); ?> 
+                                <?php endif; ?>
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Dias Emision:</strong>
                                     <small>
-                                        {{ $reporteItem->programa->lunes == 1 ? 'LU' : '' }}
-                                        {{ $reporteItem->programa->martes == 1 ? 'MA' : '' }}
-                                        {{ $reporteItem->programa->miercoles == 1 ? 'MI' : '' }}
-                                        {{ $reporteItem->programa->jueves == 1 ? 'JU' : '' }}
-                                        {{ $reporteItem->programa->viernes == 1 ? 'VI' : '' }}
-                                        {{ $reporteItem->programa->sabado == 1 ? 'SA' : '' }}
-                                        {{ $reporteItem->programa->domingo == 1 ? 'DO' : '' }}
+                                        <?php echo e($reporteItem->programa->lunes == 1 ? 'LU' : ''); ?>
+
+                                        <?php echo e($reporteItem->programa->martes == 1 ? 'MA' : ''); ?>
+
+                                        <?php echo e($reporteItem->programa->miercoles == 1 ? 'MI' : ''); ?>
+
+                                        <?php echo e($reporteItem->programa->jueves == 1 ? 'JU' : ''); ?>
+
+                                        <?php echo e($reporteItem->programa->viernes == 1 ? 'VI' : ''); ?>
+
+                                        <?php echo e($reporteItem->programa->sabado == 1 ? 'SA' : ''); ?>
+
+                                        <?php echo e($reporteItem->programa->domingo == 1 ? 'DO' : ''); ?>
+
                                     </small>
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Horario:</strong>
-                                    {{ $reporteItem->horario }}
+                                    <?php echo e($reporteItem->horario); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Cantidad Dias:</strong>
-                                    {{ $reporteItem->cantidad_dias }}
+                                    <?php echo e($reporteItem->cantidad_dias); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Cunas Por Dia:</strong>
-                                    {{ $reporteItem->cunas_por_dia }}
+                                    <?php echo e($reporteItem->cunas_por_dia); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Detalle de cuñas por día:</strong>
-                                    @php
+                                    <?php
                                         $dias = ['lu' => 'Lu', 'ma' => 'Ma', 'mi' => 'Mi', 'ju' => 'Ju', 'vi' => 'Vi', 'sa' => 'Sa', 'do' => 'Do'];
                                         $detalle = $reporteItem->cunas_por_dia_detalle ? json_decode($reporteItem->cunas_por_dia_detalle, true) : null;
-                                    @endphp
-                                    @if($detalle)
+                                    ?>
+                                    <?php if($detalle): ?>
                                         <ul class="mb-0">
-                                            @foreach($dias as $key => $label)
-                                                @if(isset($detalle[$key]) && $detalle[$key] !== null)
-                                                    <li><b>{{ $label }}:</b> {{ $detalle[$key] }}</li>
-                                                @endif
-                                            @endforeach
+                                            <?php $__currentLoopData = $dias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <?php if(isset($detalle[$key]) && $detalle[$key] !== null): ?>
+                                                    <li><b><?php echo e($label); ?>:</b> <?php echo e($detalle[$key]); ?></li>
+                                                <?php endif; ?>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </ul>
-                                    @else
+                                    <?php else: ?>
                                         <span>No hay detalle registrado.</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Precio Base:</strong>
-                                    {{ $reporteItem->programa->costo }} | {{ $reporteItem->programa->venta }}
+                                    <?php echo e($reporteItem->programa->costo); ?> | <?php echo e($reporteItem->programa->venta); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Bonificacion:</strong>
-                                    {{ $reporteItem->bonificacion }}
+                                    <?php echo e($reporteItem->bonificacion); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Valor Unitario:</strong>
-                                    {{ $reporteItem->valor_unitario }}
+                                    <?php echo e($reporteItem->valor_unitario); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Descuento:</strong>
-                                    {{ $reporteItem->descuento }}
+                                    <?php echo e($reporteItem->descuento); ?>
+
                                 </div>
                                 <div class="form-group mb-2 mb20">
                                     <strong>Valor Total:</strong>
-                                    {{ $reporteItem->valor_neto }}
+                                    <?php echo e($reporteItem->valor_neto); ?>
+
                                 </div>
 
                                 <hr>
@@ -175,62 +194,73 @@
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Precio Base Guardado:</strong>
-                                    {{ $reporteItem->precio_base ?? 'No registrado' }}
+                                    <?php echo e($reporteItem->precio_base ?? 'No registrado'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Precio de Venta Guardado:</strong>
-                                    {{ $reporteItem->precio_venta ?? 'No registrado' }}
+                                    <?php echo e($reporteItem->precio_venta ?? 'No registrado'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Tipo de Programa ID:</strong>
-                                    {{ $reporteItem->tipo_programa_id ?? 'No registrado' }}
+                                    <?php echo e($reporteItem->tipo_programa_id ?? 'No registrado'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Factor de Duración:</strong>
-                                    {{ $reporteItem->factor_duracion ?? 'No registrado' }}
+                                    <?php echo e($reporteItem->factor_duracion ?? 'No registrado'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Recargo Noticiero:</strong>
-                                    {{ $reporteItem->recargo_noticiero ? 'Sí' : 'No' }}
+                                    <?php echo e($reporteItem->recargo_noticiero ? 'Sí' : 'No'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Recargo Mención:</strong>
-                                    {{ $reporteItem->recargo_mencion ? 'Sí' : 'No' }}
+                                    <?php echo e($reporteItem->recargo_mencion ? 'Sí' : 'No'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>IVA Aplicado (%):</strong>
-                                    {{ $reporteItem->iva_aplicado ?? 'No registrado' }}%
+                                    <?php echo e($reporteItem->iva_aplicado ?? 'No registrado'); ?>%
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Valor IVA:</strong>
-                                    {{ $reporteItem->valor_iva ?? 'No registrado' }}
+                                    <?php echo e($reporteItem->valor_iva ?? 'No registrado'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Valor Total con IVA:</strong>
-                                    {{ $reporteItem->valor_total_con_iva ?? 'No registrado' }}
+                                    <?php echo e($reporteItem->valor_total_con_iva ?? 'No registrado'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Usuario Creador:</strong>
-                                    {{ $reporteItem->usuario_creador_id ?? 'No registrado' }}
+                                    <?php echo e($reporteItem->usuario_creador_id ?? 'No registrado'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Fecha de Creación:</strong>
-                                    {{ $reporteItem->created_at ? $reporteItem->created_at->format('d/m/Y H:i:s') : 'No registrado' }}
+                                    <?php echo e($reporteItem->created_at ? $reporteItem->created_at->format('d/m/Y H:i:s') : 'No registrado'); ?>
+
                                 </div>
                                 
                                 <div class="form-group mb-2 mb20">
                                     <strong>Última Actualización:</strong>
-                                    {{ $reporteItem->updated_at ? $reporteItem->updated_at->format('d/m/Y H:i:s') : 'No registrado' }}
+                                    <?php echo e($reporteItem->updated_at ? $reporteItem->updated_at->format('d/m/Y H:i:s') : 'No registrado'); ?>
+
                                 </div>
 
                     </div>
@@ -238,4 +268,6 @@
             </div>
         </div>
     </section>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\cradial\resources\views/reporte-item/show.blade.php ENDPATH**/ ?>

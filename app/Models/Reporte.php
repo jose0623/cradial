@@ -16,8 +16,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property $vigencia_desde
  * @property $vigencia_hasta
  * @property $observaciones
- * @property $subtotal
- * @property $iva
  * @property $total
  * @property $created_at
  * @property $updated_at
@@ -37,7 +35,7 @@ class Reporte extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['cliente_id', 'titulo', 'estado', 'es_propuesta', 'codigo_propuesta', 'vigencia_desde', 'vigencia_hasta', 'observaciones', 'subtotal', 'iva', 'total'];
+    protected $fillable = ['cliente_id', 'titulo', 'estado', 'es_propuesta', 'codigo_propuesta', 'vigencia_desde', 'vigencia_hasta', 'observaciones', 'total'];
 
 
     /**
@@ -53,7 +51,16 @@ class Reporte extends Model
      */
     public function reporteItems()
     {
-        return $this->hasMany(\App\Models\ReporteItem::class, 'id', 'reporte_id');
+        return $this->hasMany(\App\Models\ReporteItem::class, 'reporte_id', 'id');
     }
     
+    /**
+     * Recalcula el total sumando valor_total_con_iva de los items asociados
+     */
+    public function recalcularTotal()
+    {
+        $total = $this->reporteItems()->sum('valor_total_con_iva');
+        $this->total = $total;
+        $this->save();
+    }
 }

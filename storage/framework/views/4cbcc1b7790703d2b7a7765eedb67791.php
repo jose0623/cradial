@@ -379,9 +379,6 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?> + 16% IVA <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <br>
         <em>Valor neto final calculado según los factores seleccionados.</em>
-        <!--[if BLOCK]><![endif]--><?php if(!$precio_base || !$precio_venta): ?>
-            <br><span class="text-danger">Falta seleccionar el precio base o de venta.</span>
-        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <!--[if BLOCK]><![endif]--><?php if(!$duracion): ?>
             <br><span class="text-danger">Falta seleccionar la duración.</span>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
