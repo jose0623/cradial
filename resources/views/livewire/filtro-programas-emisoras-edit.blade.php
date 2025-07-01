@@ -1,3 +1,4 @@
+<form wire:submit.prevent="guardar">
 <div>
 
     <div class="row">
@@ -144,7 +145,7 @@
             <div>
                 <div class="form-group mb-2 mb20">
                     <label for="precio" class="form-label">{{ __('Precio Base') }}</label>
-                    <input wire:model.live="precio_base" type="text" name="precio" class="form-control" value=" {{ $programaSeleccionado->costo }} | {{ $programaSeleccionado->venta }} " readonly>
+                    <input type="text" class="form-control" value="{{ $this->formatoMoneda($precio_base) }}" readonly>
                 </div>
             </div>
         </div>
@@ -153,18 +154,18 @@
     <div class="row">
         <div class="col-md-4">
             <div class="form-group mb-2 mb20">
-                <label for="tipo_cuna" class="form-label">{{ __('Tipo de pauta') }}</label>
+                <label for="tipo_cuna" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Seleccione el tipo de pauta. La mención tiene un recargo del 30%.">{{ __('Tipo de pauta') }}</label>
                 <select wire:model.live="tipo_cuna" required name="tipo_cuna" id="tipo_cuna" class="form-control">
                     <option value="">Seleccione...</option>
                     <option value="1">Cuña</option>
-                    <option value="2">Mencion</option>
+                    <option value="2">Mención</option>
                 </select>
                 @error('tipo_cuna') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group mb-2 mb20">
-                <label for="duracion" class="form-label">{{ __('Duracion') }}</label>
+                <label for="duracion" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Seleccione la duración de la cuña. El precio se ajusta según el porcentaje.">{{ __('Duración') }}</label>
                 <select wire:model.live="duracion" required name="duracion" id="duracion" class="form-control">
                     <option value="">Seleccione...</option>
                     <option value="30%">5s</option>
@@ -183,27 +184,23 @@
                 @error('duracion') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="form-group mb-2 mb20">
-                <label for="cunas_por_dia" class="form-label">{{ __('Cunas Por Dia') }}</label>
-                <input wire:model.live="cunas_por_dia" type="number" name="cunas_por_dia" class="form-control @error('cunas_por_dia') is-invalid @enderror" value="1" id="cunas_por_dia" placeholder="Cunas Por Dia">
-                @error('cunas_por_dia') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
-            </div>
-        </div>
     </div>
     <br>
     <div class="row">
         <div class="col-md-4">
             <div class="form-group mb-2 mb20">
-                <label for="bonificacion" class="form-label">{{ __('Bonificacion') }}</label>
-                <input wire:model.live="bonificacion" type="number" name="bonificacion" class="form-control @error('bonificacion') is-invalid @enderror" value="0" id="bonificacion" placeholder="Bonificacion">
+                <label for="bonificacion" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="La bonificación se resta del valor neto. Solo valores positivos.">{{ __('Bonificación') }}</label>
+                <input wire:model.live="bonificacion" type="number" min="0" step="1" name="bonificacion" class="form-control @error('bonificacion') is-invalid @enderror" id="bonificacion" placeholder="Bonificación">
                 @error('bonificacion') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
             </div>
         </div>
         <div class="col-md-4">
             <div class="form-group mb-2 mb20">
-                <label for="descuento" class="form-label">{{ __('Descuento') }}</label>
-                <input wire:model.live="descuento" type="number" name="descuento" class="form-control @error('descuento') is-invalid @enderror" value="0" id="descuento" placeholder="Descuento">
+                <label for="descuento" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el porcentaje de descuento (0-100). Solo números enteros.">{{ __('Descuento') }}</label>
+                <div class="input-group">
+                    <input wire:model.live="descuento" type="number" min="0" step="1" name="descuento" class="form-control @error('descuento') is-invalid @enderror" id="descuento" placeholder="Descuento">
+                    <span class="input-group-text">%</span>
+                </div>
                 @error('descuento') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
             </div>
         </div>
@@ -221,14 +218,6 @@
 
         <div class="col-md-4">
             <div class="form-group mb-2 mb20">
-                <label for="valor_dia" class="form-label">{{ __('Valor x Dia') }}</label>
-                <input readonly type="number" name="valor_dia" class="form-control @error('valor_dia') is-invalid @enderror" value="{{ $valor_dia }}" id="valor_dia" placeholder="Valor dia">
-                @error('valor_dia') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-group mb-2 mb20">
                 <label for="valor_neto" class="form-label">{{ __('Valor Total') }}</label>
                 <input readonly type="number" name="valor_neto" class="form-control @error('valor_neto') is-invalid @enderror" value="{{ $valor_neto }}" id="valor_neto" placeholder="Valor Neto">
                 @error('valor_neto') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
@@ -236,7 +225,130 @@
         </div>
     </div>
     
-
-    @endif
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group mb-2 mb20">
+                <label for="precio_venta" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el precio base por cuña. Debe ser un valor positivo.">{{ __('Precio de Venta') }}</label>
+                <input wire:model.live="precio_venta" type="text" class="form-control" id="precio_venta" placeholder="Precio de venta">
+                <span class="text-muted small">{{ $this->formatoMoneda($precio_venta) }}</span>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <label class="form-label">{{ __('Cuñas por día de la semana') }}</label>
+            <div class="row">
+                @php
+                    $dias = [
+                        'lu' => ['label' => 'Lunes', 'activo' => $programaSeleccionado->lunes ?? false],
+                        'ma' => ['label' => 'Martes', 'activo' => $programaSeleccionado->martes ?? false],
+                        'mi' => ['label' => 'Miércoles', 'activo' => $programaSeleccionado->miercoles ?? false],
+                        'ju' => ['label' => 'Jueves', 'activo' => $programaSeleccionado->jueves ?? false],
+                        'vi' => ['label' => 'Viernes', 'activo' => $programaSeleccionado->viernes ?? false],
+                        'sa' => ['label' => 'Sábado', 'activo' => $programaSeleccionado->sabado ?? false],
+                        'do' => ['label' => 'Domingo', 'activo' => $programaSeleccionado->domingo ?? false],
+                    ];
+                @endphp
+                @foreach ($dias as $key => $info)
+                    @if($info['activo'])
+                        <div class="col-md-2 mb-2">
+                            <label for="cunas_{{ $key }}" class="form-label">{{ $info['label'] }}</label>
+                            <input wire:model.live="cunas_por_dia_detalle.{{ $key }}" type="number" min="0" class="form-control" id="cunas_{{ $key }}" placeholder="0">
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            <label class="form-label">{{ __('Total de cuñas') }}</label>
+            <input type="text" class="form-control" value="{{ $this->getTotalCunasPeriodo() }}" readonly>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">{{ __('Valor unitario') }}</label>
+            <input type="text" class="form-control" value="{{ $this->formatoMoneda($valor_unitario) }}" readonly>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">{{ __('Valor neto') }}</label>
+            <input type="text" class="form-control" value="{{ $this->formatoMoneda($valor_neto) }}" readonly>
+        </div>
+        @if($usa_iva)
+        <div class="col-md-3">
+            <label class="form-label">{{ __('IVA') }}</label>
+            <input type="text" class="form-control" value="{{ $this->formatoMoneda($valor_iva) }}" readonly>
+        </div>
+        @endif
+    </div>
+    <div class="row mt-2">
+        @if($usa_iva)
+        <div class="col-md-3">
+            <label class="form-label">{{ __('Total con IVA') }}</label>
+            <input type="text" class="form-control" value="{{ $this->formatoMoneda($valor_total_con_iva) }}" readonly>
+        </div>
+        @endif
+        <div class="col-md-3 d-flex align-items-end">
+            @if($usa_iva)
+                <span class="badge bg-success text-white" aria-label="Emisora con IVA" tabindex="0">Emisora con IVA</span>
+            @else
+                <span class="badge bg-secondary text-white" aria-label="Emisora sin IVA" tabindex="0">Emisora sin IVA</span>
+            @endif
+        </div>
+    </div>
    
+    <div class="alert alert-info mt-3" role="alert">
+        <strong>Resumen de cálculo:</strong><br>
+        (Precio base @if($precio_venta > 0) ({{ $this->formatoMoneda($precio_venta) }}) @else ({{ $this->formatoMoneda($precio_base) }}) @endif
+        @if(in_array($tipoProgramaSeleccionado, [9,10])) x 1.30 (Noticiero) @endif
+        @if($tipo_cuna == 2) x 1.30 (Mención) @endif
+        x {{ $duracion ?: 'Duración no seleccionada' }} (Duración)<br>
+        x {{ $this->getTotalCunasPeriodo() }} (Total de cuñas)
+        @if($descuento > 0) - {{ $descuento }}% (Descuento) @endif
+        @if($bonificacion > 0) - {{ $this->formatoMoneda($bonificacion) }} (Bonificación) @endif
+        @if($usa_iva) + 16% IVA @endif
+        <br>
+        <em>Valor neto final calculado según los factores seleccionados.</em>
+        @if(!$duracion)
+            <br><span class="text-danger">Falta seleccionar la duración.</span>
+        @endif
+        @if(!$tipo_cuna)
+            <br><span class="text-danger">Falta seleccionar el tipo de pauta.</span>
+        @endif
+        @if($this->getTotalCunasPeriodo() == 0)
+            <br><span class="text-danger">Falta ingresar cuñas por día.</span>
+        @endif
+    </div>
 </div>
+
+<!-- Campos ocultos para trazabilidad -->
+<input type="hidden" name="precio_base" value="{{ $precio_base }}">
+<input type="hidden" name="precio_venta" value="{{ $precio_venta }}">
+<input type="hidden" name="tipo_programa_id" value="{{ $tipoProgramaSeleccionado }}">
+<input type="hidden" name="factor_duracion" value="{{ $duracion }}">
+<input type="hidden" name="recargo_noticiero" value="{{ in_array($tipoProgramaSeleccionado, [9,10]) ? 1 : 0 }}">
+<input type="hidden" name="recargo_mencion" value="{{ $tipo_cuna == 2 ? 1 : 0 }}">
+<input type="hidden" name="iva_aplicado" value="{{ $usa_iva ? 16 : 0 }}">
+<input type="hidden" name="valor_iva" value="{{ $valor_iva }}">
+<input type="hidden" name="valor_total_con_iva" value="{{ $valor_total_con_iva }}">
+<input type="hidden" name="cunas_por_dia_detalle" value="{{ json_encode($cunas_por_dia_detalle) }}">
+
+<!-- Campos ocultos requeridos para el request -->
+<input type="hidden" name="programa_id" value="{{ $emisoraProgramaSeleccionadoId }}">
+<input type="hidden" name="horario" value="{{ $programaSeleccionado->horario ?? '' }}">
+<input type="hidden" name="cantidad_dias" value="{{ $cantidad_dias_transmision }}">
+<input type="hidden" name="cunas_por_dia" value="{{ $cunas_por_dia }}">
+<input type="hidden" name="valor_unitario" value="{{ $valor_unitario }}">
+<input type="hidden" name="valor_neto" value="{{ $valor_neto }}">
+
+<div class="col-md-12 mt20 mt-2">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>

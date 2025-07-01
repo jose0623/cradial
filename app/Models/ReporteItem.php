@@ -40,7 +40,32 @@ class ReporteItem extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['reporte_id', 'id_emisora', 'programa_id', 'tipo_cuna', 'duracion', 'dias_emision', 'horario', 'cantidad_dias', 'cunas_por_dia', 'bonificacion', 'valor_unitario', 'descuento', 'valor_neto'];
+    protected $fillable = [
+        'reporte_id',
+        'id_emisora',
+        'programa_id',
+        'tipo_cuna',
+        'duracion',
+        'dias_emision',
+        'horario',
+        'cantidad_dias',
+        'cunas_por_dia',
+        'bonificacion',
+        'valor_unitario',
+        'descuento',
+        'valor_neto',
+        'cunas_por_dia_detalle',
+        'precio_base',
+        'precio_venta',
+        'tipo_programa_id',
+        'factor_duracion',
+        'recargo_noticiero',
+        'recargo_mencion',
+        'iva_aplicado',
+        'valor_iva',
+        'valor_total_con_iva',
+        'usuario_creador_id',
+    ];
 
 
     /**

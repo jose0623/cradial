@@ -34,6 +34,17 @@ class ReporteItemRequest extends FormRequest
 			'valor_unitario' => 'required',
 			'descuento' => 'required',
 			'valor_neto' => 'required',
+            'cunas_por_dia_detalle' => 'nullable',
+            'precio_base' => 'nullable',
+            'precio_venta' => 'nullable',
+            'tipo_programa_id' => 'nullable',
+            'factor_duracion' => 'nullable',
+            'recargo_noticiero' => 'nullable',
+            'recargo_mencion' => 'nullable',
+            'iva_aplicado' => 'nullable',
+            'valor_iva' => 'nullable',
+            'valor_total_con_iva' => 'nullable',
+            'usuario_creador_id' => 'nullable',
         ];
     }
 }

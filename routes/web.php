@@ -110,6 +110,7 @@ Route::middleware([
     Route::get('reportes/{id_reporte}/reporte-items', [ReporteItemController::class, 'index'])->name('reportes.reporte-items.index');
     Route::get('reportes/{id_reporte}/reporte-items/create', [ReporteItemController::class, 'create'])->name('reportes.reporte-items.create');
     Route::post('reportes/{id_reporte}/reporte-items', [ReporteItemController::class, 'store'])->name('reportes.reporte-items.store');
+    Route::get('reportes/{id_reporte}/reporte-items/trazabilidad', [ReporteItemController::class, 'trazabilidad'])->name('reportes.reporte-items.trazabilidad');
     Route::get('reportes/reporte-items/{programa}', [ReporteItemController::class, 'show'])->name('reportes.reporte-items.show');
     Route::get('reportes/reporte-items/{programa}/edit', [ReporteItemController::class, 'edit'])->name('reportes.reporte-items.edit');
     Route::put('reportes/reporte-items/{programa}', [ReporteItemController::class, 'update'])->name('reportes.reporte-items.update');

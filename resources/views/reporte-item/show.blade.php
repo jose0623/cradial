@@ -132,6 +132,24 @@
                                     {{ $reporteItem->cunas_por_dia }}
                                 </div>
                                 <div class="form-group mb-2 mb20">
+                                    <strong>Detalle de cuñas por día:</strong>
+                                    @php
+                                        $dias = ['lu' => 'Lu', 'ma' => 'Ma', 'mi' => 'Mi', 'ju' => 'Ju', 'vi' => 'Vi', 'sa' => 'Sa', 'do' => 'Do'];
+                                        $detalle = $reporteItem->cunas_por_dia_detalle ? json_decode($reporteItem->cunas_por_dia_detalle, true) : null;
+                                    @endphp
+                                    @if($detalle)
+                                        <ul class="mb-0">
+                                            @foreach($dias as $key => $label)
+                                                @if(isset($detalle[$key]) && $detalle[$key] !== null)
+                                                    <li><b>{{ $label }}:</b> {{ $detalle[$key] }}</li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <span>No hay detalle registrado.</span>
+                                    @endif
+                                </div>
+                                <div class="form-group mb-2 mb20">
                                     <strong>Precio Base:</strong>
                                     {{ $reporteItem->programa->costo }} | {{ $reporteItem->programa->venta }}
                                 </div>
@@ -150,6 +168,69 @@
                                 <div class="form-group mb-2 mb20">
                                     <strong>Valor Total:</strong>
                                     {{ $reporteItem->valor_neto }}
+                                </div>
+
+                                <hr>
+                                <h5><strong>Información de Trazabilidad</strong></h5>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Precio Base Guardado:</strong>
+                                    {{ $reporteItem->precio_base ?? 'No registrado' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Precio de Venta Guardado:</strong>
+                                    {{ $reporteItem->precio_venta ?? 'No registrado' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Tipo de Programa ID:</strong>
+                                    {{ $reporteItem->tipo_programa_id ?? 'No registrado' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Factor de Duración:</strong>
+                                    {{ $reporteItem->factor_duracion ?? 'No registrado' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Recargo Noticiero:</strong>
+                                    {{ $reporteItem->recargo_noticiero ? 'Sí' : 'No' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Recargo Mención:</strong>
+                                    {{ $reporteItem->recargo_mencion ? 'Sí' : 'No' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>IVA Aplicado (%):</strong>
+                                    {{ $reporteItem->iva_aplicado ?? 'No registrado' }}%
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Valor IVA:</strong>
+                                    {{ $reporteItem->valor_iva ?? 'No registrado' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Valor Total con IVA:</strong>
+                                    {{ $reporteItem->valor_total_con_iva ?? 'No registrado' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Usuario Creador:</strong>
+                                    {{ $reporteItem->usuario_creador_id ?? 'No registrado' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Fecha de Creación:</strong>
+                                    {{ $reporteItem->created_at ? $reporteItem->created_at->format('d/m/Y H:i:s') : 'No registrado' }}
+                                </div>
+                                
+                                <div class="form-group mb-2 mb20">
+                                    <strong>Última Actualización:</strong>
+                                    {{ $reporteItem->updated_at ? $reporteItem->updated_at->format('d/m/Y H:i:s') : 'No registrado' }}
                                 </div>
 
                     </div>

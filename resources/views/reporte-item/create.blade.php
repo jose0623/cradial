@@ -24,14 +24,11 @@
                 
                     </div>
                     <div class="card-body bg-white">
-                        <form method="POST" action="{{ route('reporte-items.store') }}"  role="form" enctype="multipart/form-data">
-                            @csrf
-
-                            <input type="hidden" name="reporte_id" class="form-control @error('reporte_id') is-invalid @enderror" value="{{ $id_reporte }}" id="reporte_id" placeholder="Reporte Id">
-                            
-                            @include('reporte-item.form')
-
-                        </form>
+                        @livewire('filtro-programas-emisoras', [
+                            'vigencia_desde' => $vigencia_desde,
+                            'vigencia_hasta' => $vigencia_hasta,
+                            'id_reporte' => $id_reporte,
+                        ])
                     </div>
                 </div>
             </div>

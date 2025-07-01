@@ -11,6 +11,7 @@ use App\Models\Reporte;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ReporteItemController extends Controller
 {
@@ -70,8 +71,9 @@ class ReporteItemController extends Controller
     public function store(ReporteItemRequest $request): RedirectResponse
     {
         DB::transaction(function () use ($request) {
-            // Crea un nuevo ítem del reporte utilizando los datos validados de la solicitud
-            $reporteItem = ReporteItem::create($request->validated());
+            $data = $request->validated();
+            $data['usuario_creador_id'] = Auth::id();
+            $reporteItem = ReporteItem::create($data);
 
             // Busca el reporte asociado usando el ID proporcionado
             $reporte = Reporte::findOrFail($request->reporte_id);
@@ -233,7 +235,9 @@ class ReporteItemController extends Controller
             $valorNetoAnterior = $reporteItem->valor_neto;
 
             // Actualiza los datos del ReporteItem
-            $reporteItem->update($request->validated());
+            $data = $request->validated();
+            $data['usuario_creador_id'] = Auth::id();
+            $reporteItem->update($data);
 
             // Calcula la diferencia entre el valor neto nuevo y el anterior
             $diferenciaValorNeto = $request->valor_neto - $valorNetoAnterior;
@@ -307,5 +311,26 @@ class ReporteItemController extends Controller
             return Redirect::route('reportes.reporte-items.index', compact('reporteItems', 'id_reporte'))
                 ->with('success', 'Ítem eliminado y reporte actualizado correctamente');
         });
+    }
+
+    /**
+     * Display the trazabilidad report.
+     */
+    public function trazabilidad($id_reporte): View
+    {
+        $reporteItems = ReporteItem::with(['emisora', 'programa'])
+            ->where('reporte_id', $id_reporte)
+            ->get();
+
+        $reporte = Reporte::findOrFail($id_reporte);
+        $vigencia_desde = $reporte->vigencia_desde;
+        $vigencia_hasta = $reporte->vigencia_hasta;
+
+        return view('reporte-item.trazabilidad', compact(
+            'reporteItems',
+            'id_reporte',
+            'vigencia_desde',
+            'vigencia_hasta'
+        ));
     }
 }

@@ -1,17 +1,17 @@
 <?php $__env->startSection('template_title'); ?>
-    <?php echo e(__('Create')); ?> Reporte Item
+    <?php echo e(__('Update')); ?> Reporte Item
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
     <section class="content container-fluid">
-        <div class="row">
+        <div class="">
             <div class="col-md-12">
-                <br>
+<br>
                 <div class="card card-default">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-6">
-                                <b>Reporte N: </b> <?php echo e($id_reporte); ?> 
+                                <b>Editar Reporte N: </b> <?php echo e($id_reporte); ?> 
                                
                             </div>
                             <div class="col-6" style="text-align: right">
@@ -34,20 +34,21 @@ endif;
 unset($__errorArgs, $__bag); ?>" value="<?php echo e($vigencia_hasta); ?>" id="vigencia_hasta" placeholder="Reporte Id">
                             </div>
                         </div>
-                
                     </div>
                     <div class="card-body bg-white">
                         <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('filtro-programas-emisoras', [
+[$__name, $__params] = $__split('filtro-programas-emisoras-edit', [
+                            'id' => $id,
+                            'idreporte' => $id_reporte,
+                            'emisoraSeleccionada' => $reporteItem->id_emisora,
                             'vigencia_desde' => $vigencia_desde,
                             'vigencia_hasta' => $vigencia_hasta,
-                            'id_reporte' => $id_reporte,
                         ]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-2867335617-0', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-2000670430-0', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -64,4 +65,4 @@ if (isset($__slots)) unset($__slots);
     </section>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\cradial\resources\views/reporte-item/create.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\cradial\resources\views/reporte-item/edit.blade.php ENDPATH**/ ?>

@@ -1,3 +1,14 @@
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <strong>¡Ups! Hubo algunos problemas con tu envío.</strong>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <div class="row padding-1 p-1">
     <div class="col-md-12">
         

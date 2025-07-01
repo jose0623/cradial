@@ -30,6 +30,19 @@ return new class extends Migration
             $table->decimal('valor_unitario', 10, 2);
             $table->decimal('descuento', 5, 2)->default(0);
             $table->decimal('valor_neto', 10, 2);
+            // Detalle de cuñas por día (lunes, martes, etc.)
+            $table->json('cunas_por_dia_detalle')->nullable();
+            
+            $table->decimal('precio_base', 10, 2)->nullable();
+            $table->decimal('precio_venta', 10, 2)->nullable();
+            $table->unsignedBigInteger('tipo_programa_id')->nullable();
+            $table->decimal('factor_duracion', 5, 2)->nullable();
+            $table->boolean('recargo_noticiero')->default(false);
+            $table->boolean('recargo_mencion')->default(false);
+            $table->decimal('iva_aplicado', 5, 2)->nullable();
+            $table->decimal('valor_iva', 10, 2)->nullable();
+            $table->decimal('valor_total_con_iva', 10, 2)->nullable();
+            $table->unsignedBigInteger('usuario_creador_id')->nullable();
             
             $table->timestamps();
             

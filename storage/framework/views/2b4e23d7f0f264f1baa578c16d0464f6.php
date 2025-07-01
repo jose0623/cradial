@@ -1,3 +1,14 @@
+<?php if($errors->any()): ?>
+    <div class="alert alert-danger">
+        <strong>¡Ups! Hubo algunos problemas con tu envío.</strong>
+        <ul>
+            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <li><?php echo e($error); ?></li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
 <div class="row padding-1 p-1">
     <div class="col-md-12">
         

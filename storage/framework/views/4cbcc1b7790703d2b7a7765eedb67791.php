@@ -4,6 +4,10 @@
     <div class="row">
         <div class="col-md-4">
             <div>
+
+                <input type="hidden" name="id" value="<?php echo e($id); ?>">
+                <input type="hidden" name="reporte_id" value="<?php echo e($idreporte); ?>">
+
                 <label for="estado" class="form-label"><?php echo e(__('Estado:')); ?></label>
                 <select wire:model.live="estadoSeleccionado" id="estado" name="estado" class="form-control">
                     <option value="">Seleccione un estado</option>
@@ -50,15 +54,20 @@
         <div class="col-md-4">
             <div>
                 <label for="id_emisora" class="form-label"><?php echo e(__('Emisora: ')); ?></label>
-                <select wire:model.live="emisoraSeleccionada" id="emisora" name="id_emisora" class="form-control" <?php if(!$emisorasFiltradas->count()): ?> disabled <?php endif; ?>>
+                <select wire:model="emisoraSeleccionada" id="id_emisora" name="id_emisora" class="form-control">
                     <option value="">Seleccione una emisora</option>
                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $emisorasFiltradas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $emisora): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($emisora->id); ?>">
+                        <option value="<?php echo e($emisora->id); ?>" <?php echo e($emisoraSeleccionada == $emisora->id ? 'selected' : ''); ?>>
                             <?php echo e($emisora->name); ?>
 
-                            <!--[if BLOCK]><![endif]--><?php if($emisora->es_direccion_fisica): ?> (Dirección Física) <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                            <!--[if BLOCK]><![endif]--><?php if($emisora->es_por_region): ?> (Por Región) <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                            <!--[if BLOCK]><![endif]--><?php if($emisora->es_direccion_fisica): ?>
+                                (Dirección Física)
+                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                            <!--[if BLOCK]><![endif]--><?php if($emisora->es_por_region): ?>
+                                (Por Región)
+                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                         </option>
+                        
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                 </select>
                 <!--[if BLOCK]><![endif]--><?php if($tipoProgramaSeleccionado && $municipioSeleccionado && !$emisorasFiltradas->count()): ?>
@@ -134,17 +143,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="form-group mb-2 mb20">
-                <label for="precio" class="form-label"><?php echo e(__('Precio Base')); ?></label>
-                <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($precio_base)); ?>" readonly>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="form-group mb-2 mb20">
-                <label for="precio_venta" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el precio base por cuña. Debe ser un valor positivo."><?php echo e(__('Precio de Venta')); ?></label>
-                <input wire:model.live="precio_venta" type="text" class="form-control" id="precio_venta" placeholder="Precio de venta">
-                <span class="text-muted small"><?php echo e($this->formatoMoneda($precio_venta)); ?></span>
+        <div class="col-md-4">
+            <div>
+                <div class="form-group mb-2 mb20">
+                    <label for="precio" class="form-label"><?php echo e(__('Precio Base')); ?></label>
+                    <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($precio_base)); ?>" readonly>
+                </div>
             </div>
         </div>
     </div>
@@ -196,8 +200,10 @@ endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
-    
-        <div class="col-md-2">
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-4">
             <div class="form-group mb-2 mb20">
                 <label for="bonificacion" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="La bonificación se resta del valor neto. Solo valores positivos."><?php echo e(__('Bonificación')); ?></label>
                 <input wire:model.live="bonificacion" type="number" min="0" step="1" name="bonificacion" class="form-control <?php $__errorArgs = ['bonificacion'];
@@ -218,7 +224,7 @@ endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-4">
             <div class="form-group mb-2 mb20">
                 <label for="descuento" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el porcentaje de descuento (0-100). Solo números enteros."><?php echo e(__('Descuento')); ?></label>
                 <div class="input-group">
@@ -244,13 +250,62 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         </div>
     </div>
     <br>
-    <br>
-    <br>
-    
-    
     <div class="row">
         
-        <div class="col-md-12">
+        <div class="col-md-4">
+            <div class="form-group mb-2 mb20">
+                <label for="valor_unitario" class="form-label"><?php echo e(__('Valor Unitario')); ?></label>
+                <input readonly type="number" name="valor_unitario" class="form-control <?php $__errorArgs = ['valor_unitario'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" value="<?php echo e($valor_unitario); ?>" id="valor_unitario" placeholder="Valor Unitario">
+                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['valor_unitario'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback" role="alert"><strong><?php echo e($message); ?></strong></div> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group mb-2 mb20">
+                <label for="valor_neto" class="form-label"><?php echo e(__('Valor Total')); ?></label>
+                <input readonly type="number" name="valor_neto" class="form-control <?php $__errorArgs = ['valor_neto'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" value="<?php echo e($valor_neto); ?>" id="valor_neto" placeholder="Valor Neto">
+                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['valor_neto'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback" role="alert"><strong><?php echo e($message); ?></strong></div> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group mb-2 mb20">
+                <label for="precio_venta" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el precio base por cuña. Debe ser un valor positivo."><?php echo e(__('Precio de Venta')); ?></label>
+                <input wire:model.live="precio_venta" type="text" class="form-control" id="precio_venta" placeholder="Precio de venta">
+                <span class="text-muted small"><?php echo e($this->formatoMoneda($precio_venta)); ?></span>
+            </div>
+        </div>
+        <div class="col-md-8">
             <label class="form-label"><?php echo e(__('Cuñas por día de la semana')); ?></label>
             <div class="row">
                 <?php
@@ -274,27 +329,13 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
-
-       
-
     </div>
     <br>
-
     <div class="row">
-
         <div class="col-md-3">
             <label class="form-label"><?php echo e(__('Total de cuñas')); ?></label>
             <input type="text" class="form-control" value="<?php echo e($this->getTotalCunasPeriodo()); ?>" readonly>
         </div>
-
-    </div>
-
-    <br>
-    <br>
-    <br>
-    <div class="row">
-
-        
         <div class="col-md-3">
             <label class="form-label"><?php echo e(__('Valor unitario')); ?></label>
             <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($valor_unitario)); ?>" readonly>
@@ -302,13 +343,6 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         <div class="col-md-3">
             <label class="form-label"><?php echo e(__('Valor neto')); ?></label>
             <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($valor_neto)); ?>" readonly>
-            <div class="col-md-3 d-flex align-items-end">
-                <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?>
-                    <span class="badge bg-success text-white" aria-label="Emisora con IVA" tabindex="0">Emisora con IVA</span>
-                <?php else: ?>
-                    <span class="badge bg-secondary text-white" aria-label="Emisora sin IVA" tabindex="0">Emisora sin IVA</span>
-                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-            </div>
         </div>
         <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?>
         <div class="col-md-3">
@@ -316,16 +350,22 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($valor_iva)); ?>" readonly>
         </div>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-   
+    </div>
+    <div class="row mt-2">
         <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?>
         <div class="col-md-3">
             <label class="form-label"><?php echo e(__('Total con IVA')); ?></label>
             <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($valor_total_con_iva)); ?>" readonly>
         </div>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-       
+        <div class="col-md-3 d-flex align-items-end">
+            <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?>
+                <span class="badge bg-success text-white" aria-label="Emisora con IVA" tabindex="0">Emisora con IVA</span>
+            <?php else: ?>
+                <span class="badge bg-secondary text-white" aria-label="Emisora sin IVA" tabindex="0">Emisora sin IVA</span>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+        </div>
     </div>
-    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
    
     <div class="alert alert-info mt-3" role="alert">
         <strong>Resumen de cálculo:</strong><br>
@@ -339,6 +379,9 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?> + 16% IVA <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <br>
         <em>Valor neto final calculado según los factores seleccionados.</em>
+        <!--[if BLOCK]><![endif]--><?php if(!$precio_base || !$precio_venta): ?>
+            <br><span class="text-danger">Falta seleccionar el precio base o de venta.</span>
+        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <!--[if BLOCK]><![endif]--><?php if(!$duracion): ?>
             <br><span class="text-danger">Falta seleccionar la duración.</span>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
@@ -349,10 +392,30 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             <br><span class="text-danger">Falta ingresar cuñas por día.</span>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
     </div>
+</div>
 
-    <div class="col-md-12 mt20 mt-2">
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </div>
+<!-- Campos ocultos para trazabilidad -->
+<input type="hidden" name="precio_base" value="<?php echo e($precio_base); ?>">
+<input type="hidden" name="precio_venta" value="<?php echo e($precio_venta); ?>">
+<input type="hidden" name="tipo_programa_id" value="<?php echo e($tipoProgramaSeleccionado); ?>">
+<input type="hidden" name="factor_duracion" value="<?php echo e($duracion); ?>">
+<input type="hidden" name="recargo_noticiero" value="<?php echo e(in_array($tipoProgramaSeleccionado, [9,10]) ? 1 : 0); ?>">
+<input type="hidden" name="recargo_mencion" value="<?php echo e($tipo_cuna == 2 ? 1 : 0); ?>">
+<input type="hidden" name="iva_aplicado" value="<?php echo e($usa_iva ? 16 : 0); ?>">
+<input type="hidden" name="valor_iva" value="<?php echo e($valor_iva); ?>">
+<input type="hidden" name="valor_total_con_iva" value="<?php echo e($valor_total_con_iva); ?>">
+<input type="hidden" name="cunas_por_dia_detalle" value="<?php echo e(json_encode($cunas_por_dia_detalle)); ?>">
+
+<!-- Campos ocultos requeridos para el request -->
+<input type="hidden" name="programa_id" value="<?php echo e($emisoraProgramaSeleccionadoId); ?>">
+<input type="hidden" name="horario" value="<?php echo e($programaSeleccionado->horario ?? ''); ?>">
+<input type="hidden" name="cantidad_dias" value="<?php echo e($cantidad_dias_transmision); ?>">
+<input type="hidden" name="cunas_por_dia" value="<?php echo e($cunas_por_dia); ?>">
+<input type="hidden" name="valor_unitario" value="<?php echo e($valor_unitario); ?>">
+<input type="hidden" name="valor_neto" value="<?php echo e($valor_neto); ?>">
+
+<div class="col-md-12 mt20 mt-2">
+    <button type="submit" class="btn btn-primary">Guardar</button>
 </div>
 </form>
 
@@ -363,4 +426,4 @@ document.addEventListener('DOMContentLoaded', function () {
         new bootstrap.Tooltip(tooltipTriggerEl);
     });
 });
-</script><?php /**PATH C:\xampp\htdocs\cradial\resources\views/livewire/filtro-programas-emisoras.blade.php ENDPATH**/ ?>
+</script><?php /**PATH C:\xampp\htdocs\cradial\resources\views/livewire/filtro-programas-emisoras-edit.blade.php ENDPATH**/ ?>

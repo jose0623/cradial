@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class FiltroProgramasEmisoras extends Component
 {
@@ -31,17 +32,35 @@ class FiltroProgramasEmisoras extends Component
     public ?int $emisoraSeleccionada = null;
     public ?int $emisoraProgramaSeleccionadoId = null;
 
+    // Propiedades para las fechas (recibidas desde la vista padre)
+    public $vigencia_desde;
+    public $vigencia_hasta;
+    public $cantidad_dias_transmision = 0;
 
     public $precio_base = '';
+    public $precio_venta = '';
     public $tipo_cuna = '';
     public $duracion = '';
-    public $cunas_por_dia = 1;
+    public $cunas_por_dia_detalle = [
+        'lu' => 0,
+        'ma' => 0,
+        'mi' => 0,
+        'ju' => 0,
+        'vi' => 0,
+        'sa' => 0,
+        'do' => 0,
+    ];
     public $bonificacion = 0;
     public $descuento = 0;
     public $cantidad_dias = 1;
     public $valor_unitario = 0;
-    public $valor_dia = 0; 
     public $valor_neto = 0;
+    // IVA
+    public $usa_iva = false;
+    public $valor_iva = 0;
+    public $valor_total_con_iva = 0;
+
+    public $id_reporte;
 
     // Método que se ejecuta al inicializar el componente
     public function mount()
@@ -152,6 +171,9 @@ class FiltroProgramasEmisoras extends Component
             ->where('tipo_programa_id', $this->tipoProgramaSeleccionado)
             ->get(); // Obtiene los programas de la emisora y el tipo de programa seleccionado
         $this->programaSeleccionado = null;
+        // Obtener si la emisora tiene IVA
+        $emisora = Emisora::find($emisoraId);
+        $this->usa_iva = $emisora && $emisora->iva == 1;
         $this->resetearValoresCalculadora(); // Resetea los valores de la calculadora
     }
 
@@ -162,7 +184,18 @@ class FiltroProgramasEmisoras extends Component
 
         if ($this->programaSeleccionado) {
             $this->precio_base = $this->programaSeleccionado->costo; // Asigna el costo al precio base
-            $this->calcularValores(); // Calcula los valores al seleccionar el programa
+            $this->precio_venta = $this->programaSeleccionado->venta; // Asigna el precio de venta
+            // Inicializar cuñas solo para días activos
+            $this->cunas_por_dia_detalle = [
+                'lu' => $this->programaSeleccionado->lunes ? 0 : null,
+                'ma' => $this->programaSeleccionado->martes ? 0 : null,
+                'mi' => $this->programaSeleccionado->miercoles ? 0 : null,
+                'ju' => $this->programaSeleccionado->jueves ? 0 : null,
+                'vi' => $this->programaSeleccionado->viernes ? 0 : null,
+                'sa' => $this->programaSeleccionado->sabado ? 0 : null,
+                'do' => $this->programaSeleccionado->domingo ? 0 : null,
+            ];
+            $this->calcularValores();
         } else {
             $this->resetearValoresCalculadora(); // Resetea si no hay programa seleccionado
         }
@@ -186,67 +219,77 @@ class FiltroProgramasEmisoras extends Component
 
     public function updated($propertyName)
     {   
+        if (
+            in_array($propertyName, [
+                'precio_base', 'precio_venta', 'tipo_cuna', 'duracion', 'bonificacion', 'descuento'
+            ])
+            || str_starts_with($propertyName, 'cunas_por_dia_detalle.')
+        ) {
+            $this->calcularValores();
+        }
         if (in_array($propertyName, ['vigencia_desde', 'vigencia_hasta'])) {
             $this->validateOnly($propertyName);
             $this->calcularDiasTransmision();
-        }
-
-        if (in_array($propertyName, ['precio_base', 'tipo_cuna', 'duracion', 'cunas_por_dia', 'bonificacion', 'descuento', 'cantidad_dias'])) {
-            $this->calcularValores();
         }
     }
 
     public function calcularValores()
     {
-        // Precio base dinámico
-        $precioBase = $this->precio_base ? floatval($this->precio_base) : 0;
-    
-        // Aplicar +30% si es noticiero (tipo 9 o 10)
-        if (in_array($this->tipoProgramaSeleccionado, [9, 10])) {
+        $precioBase = floatval($this->precio_venta ?: $this->precio_base);
+        $tipoProgramaNoticiero = [9, 10];
+        // Recargo por noticiero
+        if (in_array($this->tipoProgramaSeleccionado, $tipoProgramaNoticiero)) {
             $precioBase *= 1.30;
         }
-    
-        // Factor de duración
-        $factorDuracion = $this->duracion ? floatval(str_replace('%', '', $this->duracion)) / 100 : 1;
-    
-        // Precio con duración
-        $precioConDuracion = $precioBase * $factorDuracion;
-        $valorUnitario = $precioConDuracion;
-    
-        // Recargo por mención (tipo_cuna = 2)
+        // Recargo por mención
         if ($this->tipo_cuna == 2) {
-            $valorUnitario *= 1.30;
+            $precioBase *= 1.30;
         }
-    
-        // Cálculo final
+        // Ajuste por duración
+        $factorDuracion = 1;
+        if ($this->duracion) {
+            $factorDuracion = floatval(str_replace('%', '', $this->duracion)) / 100;
+            if ($factorDuracion === 0) {
+                $factorDuracion = 1;
+            }
+        }
+        $valorUnitario = $precioBase * $factorDuracion;
         $this->valor_unitario = round($valorUnitario, 2);
-        $this->valor_dia = round($valorUnitario * $this->cunas_por_dia, 2); // Nuevo cálculo
-        
-        $valorBruto = $this->valor_dia * $this->cantidad_dias;
+        $total_cunas = $this->getTotalCunasPeriodo();
+        $valorBruto = $this->valor_unitario * $total_cunas;
         $descuentoPorcentual = $this->descuento ? floatval($this->descuento) / 100 : 0;
-        $this->valor_neto = round($valorBruto * (1 - $descuentoPorcentual), 2);
+        $valorConDescuento = $valorBruto * (1 - $descuentoPorcentual);
+        $this->valor_neto = round($valorConDescuento - floatval($this->bonificacion), 2);
+        if ($this->usa_iva) {
+            $this->valor_iva = round($this->valor_neto * 0.16, 2); // Suponiendo 16% IVA
+            $this->valor_total_con_iva = $this->valor_neto + $this->valor_iva;
+        } else {
+            $this->valor_iva = 0;
+            $this->valor_total_con_iva = $this->valor_neto;
+        }
     }
 
-    public function resetearValoresCalculadora()
+    // Método para actualizar el precio de venta manualmente
+    public function updatedPrecioVenta($value)
     {
-        $this->precio_base = '';
-        $this->tipo_cuna = '';
-        $this->duracion = '';
-        $this->cunas_por_dia = 1;
-        $this->bonificacion = 0;
-        $this->descuento = 0;
-        $this->cantidad_dias = 1;
-        $this->valor_unitario = 0;
-        $this->valor_neto = 0;
+        // Solo permitir valores positivos
+        $valor = floatval($value);
+        if ($valor < 0) {
+            $valor = 0;
+        }
+        $this->precio_venta = $valor;
+        $this->calcularValores();
     }
 
+    // Método para actualizar las cuñas por día de la semana
+    public function updatedCunasPorDiaDetalle($value, $key)
+    {
+        $this->cunas_por_dia_detalle[$key] = $value;
+        $this->calcularDiasTransmision();
+        $this->calcularValores();
+    }
 
-    // Propiedades para las fechas (recibidas desde la vista padre)
-    public $vigencia_desde;
-    public $vigencia_hasta;
-    public $cantidad_dias_transmision = 0;
-
-    // Método para calcular días de transmisión
+    // Método para calcular la cantidad de días de transmisión según los días seleccionados
     public function calcularDiasTransmision()
     {
         $this->cantidad_dias_transmision = 0;
@@ -299,12 +342,188 @@ class FiltroProgramasEmisoras extends Component
         return Carbon::parse($date);
     }
 
-   
-
+    // Helper para formato moneda colombiana
+    public function formatoMoneda($valor)
+    {
+        if ($valor === '' || $valor === null) return '';
+        return '$' . number_format($valor, 2, ',', '.');
+    }
 
     // Método que renderiza la vista del componente
     public function render()
     {
         return view('livewire.filtro-programas-emisoras');
+    }
+
+    public function resetearValoresCalculadora()
+    {
+        $this->precio_base = '';
+        $this->precio_venta = '';
+        $this->tipo_cuna = '';
+        $this->duracion = '';
+        $this->cunas_por_dia_detalle = [
+            'lu' => 0,
+            'ma' => 0,
+            'mi' => 0,
+            'ju' => 0,
+            'vi' => 0,
+            'sa' => 0,
+            'do' => 0,
+        ];
+        $this->bonificacion = 0;
+        $this->descuento = 0;
+        $this->cantidad_dias = 1;
+        $this->valor_unitario = 0;
+        $this->valor_neto = 0;
+        $this->valor_iva = 0;
+        $this->valor_total_con_iva = 0;
+    }
+
+    // Devuelve el total de cuñas en el periodo seleccionado considerando los días activos y la cantidad de cuñas por día
+    public function getTotalCunasPeriodo()
+    {
+        if (!$this->vigencia_desde || !$this->vigencia_hasta) {
+            return 0;
+        }
+        try {
+            $start = $this->parseDate($this->vigencia_desde);
+            $end = $this->parseDate($this->vigencia_hasta);
+            $total = 0;
+            $diasMap = [
+                'lu' => 'Monday',
+                'ma' => 'Tuesday',
+                'mi' => 'Wednesday',
+                'ju' => 'Thursday',
+                'vi' => 'Friday',
+                'sa' => 'Saturday',
+                'do' => 'Sunday',
+            ];
+            $diasPorSemana = array_keys($this->cunas_por_dia_detalle);
+            $current = $start->copy();
+            while ($current <= $end) {
+                foreach ($diasPorSemana as $key) {
+                    if ($current->englishDayOfWeek === $diasMap[$key] && isset($this->cunas_por_dia_detalle[$key]) && $this->cunas_por_dia_detalle[$key] > 0) {
+                        $total += $this->cunas_por_dia_detalle[$key];
+                    }
+                }
+                $current->addDay();
+            }
+            return $total;
+        } catch (\Exception $e) {
+            return 0;
+        }
+    }
+
+    public function updatedDescuento($value)
+    {
+        // Solo permitir enteros positivos y máximo 100
+        $valor = intval($value);
+        if ($valor < 0) {
+            $valor = 0;
+        }
+        if ($valor > 100) {
+            $valor = 100;
+        }
+        $this->descuento = $valor;
+    }
+
+    public function updatedBonificacion($value)
+    {
+        // Solo permitir valores positivos y máximo valor neto
+        $valor = floatval($value);
+        if ($valor < 0) {
+            $valor = 0;
+        }
+        // Si ya se calculó el valor neto, no permitir bonificación mayor
+        if ($valor > $this->valor_neto) {
+            $valor = $this->valor_neto;
+        }
+        $this->bonificacion = $valor;
+    }
+
+    public function updatedVigenciaDesde($value)
+    {
+        if ($this->vigencia_hasta && $value > $this->vigencia_hasta) {
+            $this->vigencia_desde = $this->vigencia_hasta;
+        } else {
+            $this->vigencia_desde = $value;
+        }
+    }
+
+    public function updatedVigenciaHasta($value)
+    {
+        if ($this->vigencia_desde && $value < $this->vigencia_desde) {
+            $this->vigencia_hasta = $this->vigencia_desde;
+        } else {
+            $this->vigencia_hasta = $value;
+        }
+    }
+
+    // Validación antes de guardar (puedes llamarla en el método de guardado)
+    public function validarAntesDeGuardar()
+    {
+        if ($this->getTotalCunasPeriodo() == 0) {
+            session()->flash('error', 'El total de cuñas debe ser mayor a 0.');
+            return false;
+        }
+        if ($this->precio_venta <= 0) {
+            session()->flash('error', 'El precio de venta debe ser mayor a 0.');
+            return false;
+        }
+        if (!$this->vigencia_desde || !$this->vigencia_hasta) {
+            session()->flash('error', 'Debe seleccionar un periodo de vigencia válido.');
+            return false;
+        }
+        if ($this->vigencia_desde > $this->vigencia_hasta) {
+            session()->flash('error', 'La fecha de inicio no puede ser mayor que la de fin.');
+            return false;
+        }
+        return true;
+    }
+
+    public function guardar()
+    {
+        if (!$this->validarAntesDeGuardar()) {
+            return;
+        }
+        $this->validate([
+            'precio_base' => 'required|numeric|min:0',
+            'precio_venta' => 'required|numeric|min:1',
+            'tipo_cuna' => 'required|in:1,2',
+            'duracion' => 'required',
+            'cunas_por_dia_detalle' => 'required|array',
+            'bonificacion' => 'required|numeric',
+            'descuento' => 'required|numeric|min:0|max:100',
+            'cantidad_dias' => 'required|integer|min:1',
+            'valor_unitario' => 'required|numeric',
+            'valor_neto' => 'required|numeric',
+        ]);
+        $item = \App\Models\ReporteItem::create([
+            'reporte_id' => $this->id_reporte,
+            'id_emisora' => $this->emisoraSeleccionada,
+            'programa_id' => $this->emisoraProgramaSeleccionadoId,
+            'tipo_cuna' => $this->tipo_cuna,
+            'duracion' => $this->duracion,
+            'horario' => $this->programaSeleccionado->horario ?? '',
+            'cantidad_dias' => $this->cantidad_dias_transmision,
+            'cunas_por_dia' => $this->getTotalCunasPeriodo(),
+            'bonificacion' => $this->bonificacion,
+            'valor_unitario' => $this->valor_unitario,
+            'descuento' => $this->descuento,
+            'valor_neto' => $this->valor_neto,
+            'cunas_por_dia_detalle' => json_encode($this->cunas_por_dia_detalle),
+            'precio_base' => $this->precio_base,
+            'precio_venta' => $this->precio_venta,
+            'tipo_programa_id' => $this->tipoProgramaSeleccionado,
+            'factor_duracion' => $this->duracion ? floatval(str_replace('%', '', $this->duracion)) / 100 : null,
+            'recargo_noticiero' => in_array($this->tipoProgramaSeleccionado, [9,10]) ? 1 : 0,
+            'recargo_mencion' => $this->tipo_cuna == 2 ? 1 : 0,
+            'iva_aplicado' => $this->usa_iva ? 16 : 0,
+            'valor_iva' => $this->valor_iva,
+            'valor_total_con_iva' => $this->valor_total_con_iva,
+            'usuario_creador_id' => Auth::id(),
+        ]);
+        session()->flash('success', 'Ítem creado correctamente');
+        return redirect()->route('reportes.reporte-items.index', ['id_reporte' => $this->id_reporte]);
     }
 }

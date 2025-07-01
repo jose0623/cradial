@@ -24,13 +24,13 @@
                         </div>
                     </div>
                     <div class="card-body bg-white">
-                        <form method="POST" action="{{ route('reporte-items.update', $reporteItem->id) }}"  role="form" enctype="multipart/form-data">
-                            {{ method_field('PATCH') }}
-                            @csrf
-
-                            @include('reporte-item.formEdit')
-
-                        </form>
+                        @livewire('filtro-programas-emisoras-edit', [
+                            'id' => $id,
+                            'idreporte' => $id_reporte,
+                            'emisoraSeleccionada' => $reporteItem->id_emisora,
+                            'vigencia_desde' => $vigencia_desde,
+                            'vigencia_hasta' => $vigencia_hasta,
+                        ])
                     </div>
                 </div>
             </div>

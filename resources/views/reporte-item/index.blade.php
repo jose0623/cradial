@@ -32,6 +32,9 @@
                                 <a href="{{ route('reportes.reporte-items.create', ['id_reporte' => $id_reporte]) }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
                                   {{ __('Crear Nuevo') }}
                                 </a>
+                                <a href="{{ route('reportes.reporte-items.trazabilidad', ['id_reporte' => $id_reporte]) }}" class="btn btn-info btn-sm float-right ml-2"  data-placement="left">
+                                  <i class="fa fa-chart-bar"></i> {{ __('Trazabilidad') }}
+                                </a>
                               </div>
                         </div>
                     </div>
@@ -55,9 +58,13 @@
 									<th >Horario</th>
 									<th >Cant Dias</th>
 									<th >Cuña x Dia</th>
+									<th >Precio Base</th>
+									<th >Precio Venta</th>
 									<th >Bonif</th>
 									<th >Descuento</th>
 									<th >Valor Total</th>
+									<th >IVA</th>
+									<th >Total con IVA</th>
 
                                         <th></th>
                                     </tr>
@@ -115,9 +122,13 @@
 										<td >{{ $reporteItem->horario }}</td>
 										<td >{{ $reporteItem->cantidad_dias }}</td>
 										<td >{{ $reporteItem->cunas_por_dia }}</td>
+										<td >{{ $reporteItem->precio_base }}</td>
+										<td >{{ $reporteItem->precio_venta }}</td>
 										<td >{{ $reporteItem->bonificacion }}</td>
 										<td >{{ $reporteItem->descuento }}</td>
 										<td >{{ $reporteItem->valor_neto }}</td>
+										<td >{{ $reporteItem->valor_iva }}</td>
+										<td >{{ $reporteItem->valor_total_con_iva }}</td>
 
                                             <td>
                                                 <form action="{{ route('reporte-items.destroy', $reporteItem->id) }}" method="POST">
@@ -136,6 +147,41 @@
                     </div>
                 </div>
                 {!! $reporteItems->withQueryString()->links() !!}
+                
+                <!-- Resumen de Trazabilidad -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5><strong>Resumen de Trazabilidad</strong></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h6>Items con Precio Base</h6>
+                                    <span class="badge bg-primary">{{ $reporteItems->where('precio_base', '!=', null)->count() }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h6>Items con Precio Venta</h6>
+                                    <span class="badge bg-success">{{ $reporteItems->where('precio_venta', '!=', null)->count() }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h6>Items con IVA</h6>
+                                    <span class="badge bg-info">{{ $reporteItems->where('valor_iva', '>', 0)->count() }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h6>Items con Recargos</h6>
+                                    <span class="badge bg-warning">{{ $reporteItems->filter(function($item) { return $item->recargo_noticiero == 1 || $item->recargo_mencion == 1; })->count() }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
