@@ -16,6 +16,7 @@
                                 <h4><strong>Reporte de Trazabilidad</strong></h4>
                                 @php
                                     $reporte = $reporteItems->first() ? $reporteItems->first()->reporte : null;
+                                    $total_general = $reporteItems->sum('valor_total_con_iva');
                                 @endphp
                                 @if($reporte)
                                     <b>Reporte N: </b> {{ $reporte->id }}-{{ $reporte->codigo_propuesta }} <br>
@@ -24,7 +25,8 @@
                                 @endif
                                 <b>Vigencia: </b> {{ $vigencia_desde }} - {{ $vigencia_hasta }}
                                 <br>
-                                <b>Total Items: </b> {{ $reporteItems->count() }}
+                                <b>Total Items: </b> {{ $reporteItems->count() }}<br>
+                                <b>Total General de Items: </b> <span style="color: green; font-size: 1.2em;">{{ number_format($total_general, 2) }}</span>
                             </div>
                             <div class="float-right">
                                 <a href="{{ route('reportes.reporte-items.create', ['id_reporte' => $id_reporte]) }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
@@ -103,7 +105,39 @@
                                             <td>{{ $item->programa->nombre_programa ?? 'N/A' }}</td>
                                             <td>{{ $item->precio_base ? number_format($item->precio_base, 2) : 'N/A' }}</td>
                                             <td>{{ $item->precio_venta ? number_format($item->precio_venta, 2) : 'N/A' }}</td>
-                                            <td>{{ $item->factor_duracion ?? 'N/A' }}</td>
+                                            <td>
+                                                @php
+                                                    $factor = round(floatval($item->factor_duracion), 2);
+                                                    if ($factor == 0.30) {
+                                                        $duracion = '5s';
+                                                    } elseif ($factor == 0.50) {
+                                                        $duracion = '10s';
+                                                    } elseif ($factor == 0.60) {
+                                                        $duracion = '15s';
+                                                    } elseif ($factor == 0.75) {
+                                                        $duracion = '20s';
+                                                    } elseif ($factor == 0.85) {
+                                                        $duracion = '25s';
+                                                    } elseif ($factor == 1.00 || $factor == 1) {
+                                                        $duracion = '30s';
+                                                    } elseif ($factor == 1.20) {
+                                                        $duracion = '35s';
+                                                    } elseif ($factor == 1.33) {
+                                                        $duracion = '40s';
+                                                    } elseif ($factor == 1.50) {
+                                                        $duracion = '45s';
+                                                    } elseif ($factor == 1.70) {
+                                                        $duracion = '50s';
+                                                    } elseif ($factor == 1.85) {
+                                                        $duracion = '55s';
+                                                    } elseif ($factor == 2.00 || $factor == 2) {
+                                                        $duracion = '1min';
+                                                    } else {
+                                                        $duracion = $item->factor_duracion . ' (factor)';
+                                                    }
+                                                @endphp
+                                                <span class="badge badge-info">{{ $duracion }}</span>
+                                            </td>
                                             <td>
                                                 @if($item->recargo_noticiero)
                                                     <span class="badge bg-danger">Noticiero</span>
@@ -148,8 +182,38 @@
                                             $factores = $reporteItems->where('factor_duracion', '!=', null)->groupBy('factor_duracion');
                                         @endphp
                                         @foreach($factores as $factor => $items)
+                                            @php
+                                                $f = round(floatval($factor), 2);
+                                                if ($f == 0.30) {
+                                                    $duracion = '5s';
+                                                } elseif ($f == 0.50) {
+                                                    $duracion = '10s';
+                                                } elseif ($f == 0.60) {
+                                                    $duracion = '15s';
+                                                } elseif ($f == 0.75) {
+                                                    $duracion = '20s';
+                                                } elseif ($f == 0.85) {
+                                                    $duracion = '25s';
+                                                } elseif ($f == 1.00 || $f == 1) {
+                                                    $duracion = '30s';
+                                                } elseif ($f == 1.20) {
+                                                    $duracion = '35s';
+                                                } elseif ($f == 1.33) {
+                                                    $duracion = '40s';
+                                                } elseif ($f == 1.50) {
+                                                    $duracion = '45s';
+                                                } elseif ($f == 1.70) {
+                                                    $duracion = '50s';
+                                                } elseif ($f == 1.85) {
+                                                    $duracion = '55s';
+                                                } elseif ($f == 2.00 || $f == 2) {
+                                                    $duracion = '1min';
+                                                } else {
+                                                    $duracion = $factor . ' (factor)';
+                                                }
+                                            @endphp
                                             <div class="d-flex justify-content-between">
-                                                <span>{{ $factor }}</span>
+                                                <span>{{ $duracion }}</span>
                                                 <span class="badge bg-primary">{{ $items->count() }} items</span>
                                             </div>
                                         @endforeach

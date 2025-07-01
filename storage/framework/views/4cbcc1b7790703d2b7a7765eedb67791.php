@@ -143,12 +143,17 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div>
-                <div class="form-group mb-2 mb20">
-                    <label for="precio" class="form-label"><?php echo e(__('Precio Base')); ?></label>
-                    <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($precio_base)); ?>" readonly>
-                </div>
+        <div class="col-md-2">
+            <div class="form-group mb-2 mb20">
+                <label for="precio" class="form-label"><?php echo e(__('Precio Base')); ?></label>
+                <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($precio_base)); ?>" readonly>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group mb-2 mb20">
+                <label for="precio_venta" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el precio base por cuña. Debe ser un valor positivo."><?php echo e(__('Precio de Venta')); ?></label>
+                <input wire:model.live="precio_venta" type="text" class="form-control" id="precio_venta" placeholder="Precio de venta">
+                <span class="text-muted small"><?php echo e($this->formatoMoneda($precio_venta)); ?></span>
             </div>
         </div>
     </div>
@@ -200,10 +205,8 @@ endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-md-4">
+   
+        <div class="col-md-2">
             <div class="form-group mb-2 mb20">
                 <label for="bonificacion" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="La bonificación se resta del valor neto. Solo valores positivos."><?php echo e(__('Bonificación')); ?></label>
                 <input wire:model.live="bonificacion" type="number" min="0" step="1" name="bonificacion" class="form-control <?php $__errorArgs = ['bonificacion'];
@@ -224,7 +227,7 @@ endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             <div class="form-group mb-2 mb20">
                 <label for="descuento" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el porcentaje de descuento (0-100). Solo números enteros."><?php echo e(__('Descuento')); ?></label>
                 <div class="input-group">
@@ -250,92 +253,47 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         </div>
     </div>
     <br>
-    <div class="row">
-        
-        <div class="col-md-4">
-            <div class="form-group mb-2 mb20">
-                <label for="valor_unitario" class="form-label"><?php echo e(__('Valor Unitario')); ?></label>
-                <input readonly type="number" name="valor_unitario" class="form-control <?php $__errorArgs = ['valor_unitario'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>" value="<?php echo e($valor_unitario); ?>" id="valor_unitario" placeholder="Valor Unitario">
-                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['valor_unitario'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback" role="alert"><strong><?php echo e($message); ?></strong></div> <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-group mb-2 mb20">
-                <label for="valor_neto" class="form-label"><?php echo e(__('Valor Total')); ?></label>
-                <input readonly type="number" name="valor_neto" class="form-control <?php $__errorArgs = ['valor_neto'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>" value="<?php echo e($valor_neto); ?>" id="valor_neto" placeholder="Valor Neto">
-                <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['valor_neto'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?> <div class="invalid-feedback" role="alert"><strong><?php echo e($message); ?></strong></div> <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
-            </div>
-        </div>
-    </div>
+    
     
     <div class="row">
         <div class="col-md-4">
             <div class="form-group mb-2 mb20">
-                <label for="precio_venta" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el precio base por cuña. Debe ser un valor positivo."><?php echo e(__('Precio de Venta')); ?></label>
-                <input wire:model.live="precio_venta" type="text" class="form-control" id="precio_venta" placeholder="Precio de venta">
-                <span class="text-muted small"><?php echo e($this->formatoMoneda($precio_venta)); ?></span>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <label class="form-label"><?php echo e(__('Cuñas por día de la semana')); ?></label>
-            <div class="row">
-                <?php
-                    $dias = [
-                        'lu' => ['label' => 'Lunes', 'activo' => $programaSeleccionado->lunes ?? false],
-                        'ma' => ['label' => 'Martes', 'activo' => $programaSeleccionado->martes ?? false],
-                        'mi' => ['label' => 'Miércoles', 'activo' => $programaSeleccionado->miercoles ?? false],
-                        'ju' => ['label' => 'Jueves', 'activo' => $programaSeleccionado->jueves ?? false],
-                        'vi' => ['label' => 'Viernes', 'activo' => $programaSeleccionado->viernes ?? false],
-                        'sa' => ['label' => 'Sábado', 'activo' => $programaSeleccionado->sabado ?? false],
-                        'do' => ['label' => 'Domingo', 'activo' => $programaSeleccionado->domingo ?? false],
-                    ];
-                ?>
-                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $dias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $info): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <!--[if BLOCK]><![endif]--><?php if($info['activo']): ?>
-                        <div class="col-md-2 mb-2">
-                            <label for="cunas_<?php echo e($key); ?>" class="form-label"><?php echo e($info['label']); ?></label>
-                            <input wire:model.live="cunas_por_dia_detalle.<?php echo e($key); ?>" type="number" min="0" class="form-control" id="cunas_<?php echo e($key); ?>" placeholder="0">
-                        </div>
-                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                <label class="form-label"><?php echo e(__('Cuñas por día de la semana')); ?></label>
+                <div class="row">
+                    <?php
+                        $dias = [
+                            'lu' => ['label' => 'Lunes', 'activo' => $programaSeleccionado->lunes ?? false],
+                            'ma' => ['label' => 'Martes', 'activo' => $programaSeleccionado->martes ?? false],
+                            'mi' => ['label' => 'Miércoles', 'activo' => $programaSeleccionado->miercoles ?? false],
+                            'ju' => ['label' => 'Jueves', 'activo' => $programaSeleccionado->jueves ?? false],
+                            'vi' => ['label' => 'Viernes', 'activo' => $programaSeleccionado->viernes ?? false],
+                            'sa' => ['label' => 'Sábado', 'activo' => $programaSeleccionado->sabado ?? false],
+                            'do' => ['label' => 'Domingo', 'activo' => $programaSeleccionado->domingo ?? false],
+                        ];
+                    ?>
+                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $dias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $info): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <!--[if BLOCK]><![endif]--><?php if($info['activo']): ?>
+                            <div class="col-md-2 mb-2">
+                                <label for="cunas_<?php echo e($key); ?>" class="form-label"><?php echo e($info['label']); ?></label>
+                                <input wire:model.live="cunas_por_dia_detalle.<?php echo e($key); ?>" type="number" min="0" class="form-control" id="cunas_<?php echo e($key); ?>" placeholder="0">
+                            </div>
+                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                </div>
             </div>
         </div>
     </div>
+
     <br>
     <div class="row">
         <div class="col-md-3">
             <label class="form-label"><?php echo e(__('Total de cuñas')); ?></label>
             <input type="text" class="form-control" value="<?php echo e($this->getTotalCunasPeriodo()); ?>" readonly>
         </div>
+    </div>
+    <br>
+    <div class="row">
+
         <div class="col-md-3">
             <label class="form-label"><?php echo e(__('Valor unitario')); ?></label>
             <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($valor_unitario)); ?>" readonly>
@@ -343,6 +301,13 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         <div class="col-md-3">
             <label class="form-label"><?php echo e(__('Valor neto')); ?></label>
             <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($valor_neto)); ?>" readonly>
+            <div class="col-md-3 d-flex align-items-end">
+                <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?>
+                    <span class="badge bg-success text-white" aria-label="Emisora con IVA" tabindex="0">Emisora con IVA</span>
+                <?php else: ?>
+                    <span class="badge bg-secondary text-white" aria-label="Emisora sin IVA" tabindex="0">Emisora sin IVA</span>
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+            </div>
         </div>
         <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?>
         <div class="col-md-3">
@@ -350,21 +315,14 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($valor_iva)); ?>" readonly>
         </div>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-    </div>
-    <div class="row mt-2">
-        <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?>
-        <div class="col-md-3">
-            <label class="form-label"><?php echo e(__('Total con IVA')); ?></label>
-            <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($valor_total_con_iva)); ?>" readonly>
-        </div>
-        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-        <div class="col-md-3 d-flex align-items-end">
+    
             <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?>
-                <span class="badge bg-success text-white" aria-label="Emisora con IVA" tabindex="0">Emisora con IVA</span>
-            <?php else: ?>
-                <span class="badge bg-secondary text-white" aria-label="Emisora sin IVA" tabindex="0">Emisora sin IVA</span>
+            <div class="col-md-3">
+                <label class="form-label"><?php echo e(__('Total con IVA')); ?></label>
+                <input type="text" class="form-control" value="<?php echo e($this->formatoMoneda($valor_total_con_iva)); ?>" readonly>
+            </div>
             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-        </div>
+           
     </div>
    
     <div class="alert alert-info mt-3" role="alert">
@@ -376,7 +334,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         x <?php echo e($this->getTotalCunasPeriodo()); ?> (Total de cuñas)
         <?php if($descuento > 0): ?> - <?php echo e($descuento); ?>% (Descuento) <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <!--[if BLOCK]><![endif]--><?php if($bonificacion > 0): ?> - <?php echo e($this->formatoMoneda($bonificacion)); ?> (Bonificación) <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-        <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?> + 16% IVA <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+        <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?> + 19% IVA <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <br>
         <em>Valor neto final calculado según los factores seleccionados.</em>
         <!--[if BLOCK]><![endif]--><?php if(!$duracion): ?>
@@ -389,6 +347,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
             <br><span class="text-danger">Falta ingresar cuñas por día.</span>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
     </div>
+    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 </div>
 
 <!-- Campos ocultos para trazabilidad -->

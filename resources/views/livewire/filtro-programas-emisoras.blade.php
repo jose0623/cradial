@@ -292,7 +292,7 @@
         x {{ $this->getTotalCunasPeriodo() }} (Total de cuñas)
         @if($descuento > 0) - {{ $descuento }}% (Descuento) @endif
         @if($bonificacion > 0) - {{ $this->formatoMoneda($bonificacion) }} (Bonificación) @endif
-        @if($usa_iva) + 16% IVA @endif
+        @if($usa_iva) + 19% IVA @endif
         <br>
         <em>Valor neto final calculado según los factores seleccionados.</em>
         @if(!$duracion)

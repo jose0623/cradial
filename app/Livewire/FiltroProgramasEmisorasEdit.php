@@ -157,6 +157,9 @@ class FiltroProgramasEmisorasEdit extends Component
             $this->vigencia_desde = $this->vigencia_desde ? Carbon::parse($this->vigencia_desde)->format('d/m/Y') : null;
             $this->vigencia_hasta = $this->vigencia_hasta ? Carbon::parse($this->vigencia_hasta)->format('d/m/Y') : null;
 
+            // Establecer correctamente el uso de IVA según la emisora
+            $this->usa_iva = $reporteItem->emisora && $reporteItem->emisora->iva == 1;
+
             // Cargar detalle de cuñas por día si existe
             if ($reporteItem->cunas_por_dia_detalle) {
                 $detalle = json_decode($reporteItem->cunas_por_dia_detalle, true);
@@ -336,37 +339,34 @@ class FiltroProgramasEmisorasEdit extends Component
     // Método para calcular los valores de la transmisión
     public function calcularValores()
     {
-        // Usar precio_venta si está disponible, sino precio_base
-        $precio = $this->precio_venta ? floatval($this->precio_venta) : ($this->precio_base ? floatval($this->precio_base) : 0);
-        $total_cunas = 0;
-        foreach ($this->cunas_por_dia_detalle as $dia => $cantidad) {
-            if ($cantidad !== null && is_numeric($cantidad)) {
-                $total_cunas += $cantidad * $this->contarDiasSemanaEnRango($dia);
+        $precioBase = floatval($this->precio_venta ?: $this->precio_base);
+        $tipoProgramaNoticiero = [9, 10];
+        // Recargo por noticiero
+        if (in_array($this->tipoProgramaSeleccionado, $tipoProgramaNoticiero)) {
+            $precioBase *= 1.30;
+        }
+        // Recargo por mención
+        if ($this->tipo_cuna == 2) {
+            $precioBase *= 1.30;
+        }
+        // Ajuste por duración
+        $factorDuracion = 1;
+        if ($this->duracion) {
+            $factorDuracion = floatval(str_replace('%', '', $this->duracion)) / 100;
+            if ($factorDuracion === 0) {
+                $factorDuracion = 1;
             }
         }
-
-        if (in_array($this->tipoProgramaSeleccionado, [9, 10])) {
-            $precio *= 1.30;
-        }
-
-        $factorDuracion = $this->duracion ? floatval(str_replace('%', '', $this->duracion)) / 100 : 1;
-        $precioConDuracion = $precio * $factorDuracion;
-        $valorUnitario = $precioConDuracion;
-
-        if ($this->tipo_cuna == 2) {
-            $valorUnitario *= 1.30;
-        }
-
+        $valorUnitario = $precioBase * $factorDuracion;
         $this->valor_unitario = round($valorUnitario, 2);
-        $this->valor_dia = round($valorUnitario * $this->cunas_por_dia, 2);
-
-        $valorBruto = $this->valor_dia * $this->cantidad_dias;
+        $total_cunas = $this->getTotalCunasPeriodo();
+        $valorBruto = $this->valor_unitario * $total_cunas;
         $descuentoPorcentual = $this->descuento ? floatval($this->descuento) / 100 : 0;
-        $this->valor_neto = round($valorBruto * (1 - $descuentoPorcentual), 2);
-        // Cálculo de IVA
+        $valorConDescuento = $valorBruto * (1 - $descuentoPorcentual);
+        $this->valor_neto = round($valorConDescuento - floatval($this->bonificacion), 2);
         if ($this->usa_iva) {
-            $this->valor_iva = round($this->valor_neto * 0.19, 2);
-            $this->valor_total_con_iva = round($this->valor_neto + $this->valor_iva, 2);
+            $this->valor_iva = round($this->valor_neto * 0.19, 2); // 19% IVA
+            $this->valor_total_con_iva = $this->valor_neto + $this->valor_iva;
         } else {
             $this->valor_iva = 0;
             $this->valor_total_con_iva = $this->valor_neto;
@@ -528,10 +528,10 @@ class FiltroProgramasEmisorasEdit extends Component
                 'valor_unitario' => $this->valor_unitario,
                 'valor_neto' => $this->valor_neto,
                 'cunas_por_dia_detalle' => json_encode($this->cunas_por_dia_detalle),
-                'factor_duracion' => $this->duracion,
+                'factor_duracion' => $this->duracion ? floatval(str_replace('%', '', $this->duracion)) / 100 : 1,
                 'recargo_noticiero' => in_array($this->tipoProgramaSeleccionado, [9,10]) ? 1 : 0,
                 'recargo_mencion' => $this->tipo_cuna == 2 ? 1 : 0,
-                'iva_aplicado' => $this->usa_iva ? 16 : 0,
+                'iva_aplicado' => $this->usa_iva ? 19 : 0,
                 'valor_iva' => $this->valor_iva,
                 'valor_total_con_iva' => $this->valor_total_con_iva,
             ]);
@@ -539,6 +539,45 @@ class FiltroProgramasEmisorasEdit extends Component
             return redirect()->route('reportes.reporte-items.index', ['id_reporte' => $item->reporte_id]);
         }
         session()->flash('error', 'No se encontró el ítem para actualizar.');
+    }
+
+    public function formatoMoneda($valor)
+    {
+        return number_format($valor, 2, ',', '.');
+    }
+
+    public function getTotalCunasPeriodo()
+    {
+        if (!$this->vigencia_desde || !$this->vigencia_hasta) {
+            return 0;
+        }
+        try {
+            $start = $this->parseDate($this->vigencia_desde);
+            $end = $this->parseDate($this->vigencia_hasta);
+            $total = 0;
+            $diasMap = [
+                'lu' => 'Monday',
+                'ma' => 'Tuesday',
+                'mi' => 'Wednesday',
+                'ju' => 'Thursday',
+                'vi' => 'Friday',
+                'sa' => 'Saturday',
+                'do' => 'Sunday',
+            ];
+            $current = $start->copy();
+            while ($current <= $end) {
+                foreach ($diasMap as $key => $dayName) {
+                    if (strtolower($current->englishDayOfWeek) == strtolower($dayName) && isset($this->cunas_por_dia_detalle[$key]) && $this->cunas_por_dia_detalle[$key] !== null) {
+                        $total += intval($this->cunas_por_dia_detalle[$key]);
+                    }
+                }
+                $current->addDay();
+            }
+            return $total;
+        } catch (\Exception $e) {
+            Log::error("Error calculando total de cuñas: " . $e->getMessage());
+            return 0;
+        }
     }
 }
 

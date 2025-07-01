@@ -141,12 +141,17 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div>
-                <div class="form-group mb-2 mb20">
-                    <label for="precio" class="form-label">{{ __('Precio Base') }}</label>
-                    <input type="text" class="form-control" value="{{ $this->formatoMoneda($precio_base) }}" readonly>
-                </div>
+        <div class="col-md-2">
+            <div class="form-group mb-2 mb20">
+                <label for="precio" class="form-label">{{ __('Precio Base') }}</label>
+                <input type="text" class="form-control" value="{{ $this->formatoMoneda($precio_base) }}" readonly>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group mb-2 mb20">
+                <label for="precio_venta" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el precio base por cuña. Debe ser un valor positivo.">{{ __('Precio de Venta') }}</label>
+                <input wire:model.live="precio_venta" type="text" class="form-control" id="precio_venta" placeholder="Precio de venta">
+                <span class="text-muted small">{{ $this->formatoMoneda($precio_venta) }}</span>
             </div>
         </div>
     </div>
@@ -184,17 +189,15 @@
                 @error('duracion') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
             </div>
         </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-md-4">
+   
+        <div class="col-md-2">
             <div class="form-group mb-2 mb20">
                 <label for="bonificacion" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="La bonificación se resta del valor neto. Solo valores positivos.">{{ __('Bonificación') }}</label>
                 <input wire:model.live="bonificacion" type="number" min="0" step="1" name="bonificacion" class="form-control @error('bonificacion') is-invalid @enderror" id="bonificacion" placeholder="Bonificación">
                 @error('bonificacion') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             <div class="form-group mb-2 mb20">
                 <label for="descuento" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el porcentaje de descuento (0-100). Solo números enteros.">{{ __('Descuento') }}</label>
                 <div class="input-group">
@@ -206,64 +209,47 @@
         </div>
     </div>
     <br>
-    <div class="row">
-        
-        <div class="col-md-4">
-            <div class="form-group mb-2 mb20">
-                <label for="valor_unitario" class="form-label">{{ __('Valor Unitario') }}</label>
-                <input readonly type="number" name="valor_unitario" class="form-control @error('valor_unitario') is-invalid @enderror" value="{{ $valor_unitario }}" id="valor_unitario" placeholder="Valor Unitario">
-                @error('valor_unitario') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-group mb-2 mb20">
-                <label for="valor_neto" class="form-label">{{ __('Valor Total') }}</label>
-                <input readonly type="number" name="valor_neto" class="form-control @error('valor_neto') is-invalid @enderror" value="{{ $valor_neto }}" id="valor_neto" placeholder="Valor Neto">
-                @error('valor_neto') <div class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></div> @enderror
-            </div>
-        </div>
-    </div>
+    
     
     <div class="row">
         <div class="col-md-4">
             <div class="form-group mb-2 mb20">
-                <label for="precio_venta" class="form-label" data-bs-toggle="tooltip" data-bs-placement="top" title="Ingrese el precio base por cuña. Debe ser un valor positivo.">{{ __('Precio de Venta') }}</label>
-                <input wire:model.live="precio_venta" type="text" class="form-control" id="precio_venta" placeholder="Precio de venta">
-                <span class="text-muted small">{{ $this->formatoMoneda($precio_venta) }}</span>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <label class="form-label">{{ __('Cuñas por día de la semana') }}</label>
-            <div class="row">
-                @php
-                    $dias = [
-                        'lu' => ['label' => 'Lunes', 'activo' => $programaSeleccionado->lunes ?? false],
-                        'ma' => ['label' => 'Martes', 'activo' => $programaSeleccionado->martes ?? false],
-                        'mi' => ['label' => 'Miércoles', 'activo' => $programaSeleccionado->miercoles ?? false],
-                        'ju' => ['label' => 'Jueves', 'activo' => $programaSeleccionado->jueves ?? false],
-                        'vi' => ['label' => 'Viernes', 'activo' => $programaSeleccionado->viernes ?? false],
-                        'sa' => ['label' => 'Sábado', 'activo' => $programaSeleccionado->sabado ?? false],
-                        'do' => ['label' => 'Domingo', 'activo' => $programaSeleccionado->domingo ?? false],
-                    ];
-                @endphp
-                @foreach ($dias as $key => $info)
-                    @if($info['activo'])
-                        <div class="col-md-2 mb-2">
-                            <label for="cunas_{{ $key }}" class="form-label">{{ $info['label'] }}</label>
-                            <input wire:model.live="cunas_por_dia_detalle.{{ $key }}" type="number" min="0" class="form-control" id="cunas_{{ $key }}" placeholder="0">
-                        </div>
-                    @endif
-                @endforeach
+                <label class="form-label">{{ __('Cuñas por día de la semana') }}</label>
+                <div class="row">
+                    @php
+                        $dias = [
+                            'lu' => ['label' => 'Lunes', 'activo' => $programaSeleccionado->lunes ?? false],
+                            'ma' => ['label' => 'Martes', 'activo' => $programaSeleccionado->martes ?? false],
+                            'mi' => ['label' => 'Miércoles', 'activo' => $programaSeleccionado->miercoles ?? false],
+                            'ju' => ['label' => 'Jueves', 'activo' => $programaSeleccionado->jueves ?? false],
+                            'vi' => ['label' => 'Viernes', 'activo' => $programaSeleccionado->viernes ?? false],
+                            'sa' => ['label' => 'Sábado', 'activo' => $programaSeleccionado->sabado ?? false],
+                            'do' => ['label' => 'Domingo', 'activo' => $programaSeleccionado->domingo ?? false],
+                        ];
+                    @endphp
+                    @foreach ($dias as $key => $info)
+                        @if($info['activo'])
+                            <div class="col-md-2 mb-2">
+                                <label for="cunas_{{ $key }}" class="form-label">{{ $info['label'] }}</label>
+                                <input wire:model.live="cunas_por_dia_detalle.{{ $key }}" type="number" min="0" class="form-control" id="cunas_{{ $key }}" placeholder="0">
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
+
     <br>
     <div class="row">
         <div class="col-md-3">
             <label class="form-label">{{ __('Total de cuñas') }}</label>
             <input type="text" class="form-control" value="{{ $this->getTotalCunasPeriodo() }}" readonly>
         </div>
+    </div>
+    <br>
+    <div class="row">
+
         <div class="col-md-3">
             <label class="form-label">{{ __('Valor unitario') }}</label>
             <input type="text" class="form-control" value="{{ $this->formatoMoneda($valor_unitario) }}" readonly>
@@ -271,6 +257,13 @@
         <div class="col-md-3">
             <label class="form-label">{{ __('Valor neto') }}</label>
             <input type="text" class="form-control" value="{{ $this->formatoMoneda($valor_neto) }}" readonly>
+            <div class="col-md-3 d-flex align-items-end">
+                @if($usa_iva)
+                    <span class="badge bg-success text-white" aria-label="Emisora con IVA" tabindex="0">Emisora con IVA</span>
+                @else
+                    <span class="badge bg-secondary text-white" aria-label="Emisora sin IVA" tabindex="0">Emisora sin IVA</span>
+                @endif
+            </div>
         </div>
         @if($usa_iva)
         <div class="col-md-3">
@@ -278,21 +271,14 @@
             <input type="text" class="form-control" value="{{ $this->formatoMoneda($valor_iva) }}" readonly>
         </div>
         @endif
-    </div>
-    <div class="row mt-2">
-        @if($usa_iva)
-        <div class="col-md-3">
-            <label class="form-label">{{ __('Total con IVA') }}</label>
-            <input type="text" class="form-control" value="{{ $this->formatoMoneda($valor_total_con_iva) }}" readonly>
-        </div>
-        @endif
-        <div class="col-md-3 d-flex align-items-end">
+    
             @if($usa_iva)
-                <span class="badge bg-success text-white" aria-label="Emisora con IVA" tabindex="0">Emisora con IVA</span>
-            @else
-                <span class="badge bg-secondary text-white" aria-label="Emisora sin IVA" tabindex="0">Emisora sin IVA</span>
+            <div class="col-md-3">
+                <label class="form-label">{{ __('Total con IVA') }}</label>
+                <input type="text" class="form-control" value="{{ $this->formatoMoneda($valor_total_con_iva) }}" readonly>
+            </div>
             @endif
-        </div>
+           
     </div>
    
     <div class="alert alert-info mt-3" role="alert">
@@ -304,7 +290,7 @@
         x {{ $this->getTotalCunasPeriodo() }} (Total de cuñas)
         @if($descuento > 0) - {{ $descuento }}% (Descuento) @endif
         @if($bonificacion > 0) - {{ $this->formatoMoneda($bonificacion) }} (Bonificación) @endif
-        @if($usa_iva) + 16% IVA @endif
+        @if($usa_iva) + 19% IVA @endif
         <br>
         <em>Valor neto final calculado según los factores seleccionados.</em>
         @if(!$duracion)
@@ -317,6 +303,7 @@
             <br><span class="text-danger">Falta ingresar cuñas por día.</span>
         @endif
     </div>
+    @endif
 </div>
 
 <!-- Campos ocultos para trazabilidad -->

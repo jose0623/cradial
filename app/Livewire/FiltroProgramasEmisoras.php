@@ -261,7 +261,7 @@ class FiltroProgramasEmisoras extends Component
         $valorConDescuento = $valorBruto * (1 - $descuentoPorcentual);
         $this->valor_neto = round($valorConDescuento - floatval($this->bonificacion), 2);
         if ($this->usa_iva) {
-            $this->valor_iva = round($this->valor_neto * 0.16, 2); // Suponiendo 16% IVA
+            $this->valor_iva = round($this->valor_neto * 0.19, 2); // 19% IVA
             $this->valor_total_con_iva = $this->valor_neto + $this->valor_iva;
         } else {
             $this->valor_iva = 0;
@@ -518,7 +518,7 @@ class FiltroProgramasEmisoras extends Component
             'factor_duracion' => $this->duracion ? floatval(str_replace('%', '', $this->duracion)) / 100 : null,
             'recargo_noticiero' => in_array($this->tipoProgramaSeleccionado, [9,10]) ? 1 : 0,
             'recargo_mencion' => $this->tipo_cuna == 2 ? 1 : 0,
-            'iva_aplicado' => $this->usa_iva ? 16 : 0,
+            'iva_aplicado' => $this->usa_iva ? 19 : 0,
             'valor_iva' => $this->valor_iva,
             'valor_total_con_iva' => $this->valor_total_con_iva,
             'usuario_creador_id' => Auth::id(),

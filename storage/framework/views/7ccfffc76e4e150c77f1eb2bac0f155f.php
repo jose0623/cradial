@@ -336,7 +336,7 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         x <?php echo e($this->getTotalCunasPeriodo()); ?> (Total de cuñas)
         <?php if($descuento > 0): ?> - <?php echo e($descuento); ?>% (Descuento) <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <!--[if BLOCK]><![endif]--><?php if($bonificacion > 0): ?> - <?php echo e($this->formatoMoneda($bonificacion)); ?> (Bonificación) <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-        <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?> + 16% IVA <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+        <!--[if BLOCK]><![endif]--><?php if($usa_iva): ?> + 19% IVA <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <br>
         <em>Valor neto final calculado según los factores seleccionados.</em>
         <!--[if BLOCK]><![endif]--><?php if(!$duracion): ?>
